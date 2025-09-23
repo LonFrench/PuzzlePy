@@ -7,37 +7,106 @@
 This module contains abstract base classes, enumerations, and constants
 for implementing various types of 2-D puzzles.
 
-### *class* puzzle.LineType(\*values)
+### *class* puzzle.Puzzle(row_dimension, column_dimension)
 
-Bases: `Enum`
+Bases: `object`
 
-#### ROW *= 0*
+#### \_\_init_\_(row_dimension, column_dimension)
 
-#### COL *= 1*
+#### \_\_eq_\_(other) → bool
 
-### *class* puzzle.CellContext(\*values)
+Compares contents of all cells against the other puzzle’s cells’ contents.
 
-Bases: `Enum`
+* **Parameters:**
+  **other** (*Puzzle class* *or* *derivative.*) – Puzzle to compare this puzzle to
+* **Returns:**
+  True if dimensions of puzzles match and all their Cells’ contents are equal
+* **Return type:**
+  bool
 
-#### ROW *= 1*
+#### as_list()
 
-#### COLUMN *= 2*
+Returns puzzle as list of cells’ contents.
 
-#### BOX *= 3*
+#### clear()
 
-#### DIAGONAL_MAIN *= 4*
+Sets contents of all non-immutable cells to placeholder.
 
-#### DIAGONAL_MINOR *= 5*
+#### empty_count()
 
-#### NONE *= 6*
+Returns the number of empty Cells, i.e., those that only contain
+the placeholder.
+
+#### add_row(row)
+
+#### max_contents_size()
+
+Returns the highest number of elements found in any Cell.
+
+#### get_random_empty()
+
+#### get_first_cell_in_row(row_number) → [Cell](#puzzle.Cell)
+
+Returns first cell in row.
+
+* **Parameters:**
+  **row_number** (*int*) – Row number (not index, i.e., starts at 1)
+* **Returns:**
+  First cell in given row
+* **Return type:**
+  [Cell](#puzzle.Cell)
+
+#### get_first_cell_in_column(column_number) → [Cell](#puzzle.Cell)
+
+Returns first cell in column.
+
+* **Parameters:**
+  **column_number** (*int*) – Column number (not index, i.e., starts at 1)
+* **Returns:**
+  First cell in given column
+* **Return type:**
+  [Cell](#puzzle.Cell)
+
+#### log_line(context=CellContext.NONE) → str
+
+Generates string representation appropriate for logging of all puzzle 
+lines of the given type.
+
+* **Parameters:**
+  **context** ([*CellContext*](#puzzle.CellContext)) – Conext, i.e., row or column, in which to generate
+  strings
+* **Raises:**
+  PuzzleExcept if invalid context passed
+
+#### puzzle_log()
+
+Returns puzzle contents in a format appropriate for logging.
+
+### *class* puzzle.PuzzleBuilder(puzzle, cell_factory, num_rows, num_columns, values=None, all_possible_values=['1', '2', '3', '4', '5', '6', '7', '8', '9'], placeholder=' ')
+
+Bases: `ABC`
+
+Base puzzle builder that performs basic setup and validation. Most of the
+details should be taken care of in derived classes.
+
+#### *abstractmethod* \_\_init_\_(puzzle, cell_factory, num_rows, num_columns, values=None, all_possible_values=['1', '2', '3', '4', '5', '6', '7', '8', '9'], placeholder=' ')
+
+Validates and initializes puzzle with any passed-in values.
+
+* **Parameters:**
+  * **starting_values** (*List* *of*  *(**typically* *)* *single char strings* *,* *e.g.* *,* 
+     *[* *'7'* *,* *'2'* *,* *'9'* *,* *...* *,* *'7'* *]* *that represent all* 
+    *(**typically 81* *)* *cell values in puzzle.*) – Lists of character lists to use for initial 
+    puzzle state. If nothing passed the
+    placeholder value will be used throughout.
+  * **dimension** (*int* *(**must be square* *of* *an integer* *)*) – Puzzle dimension, i.e., length of rows and columns (defaults to 9)
+  * **all_possible_values** ( *[**char* *]*) – List of all possible values if no starting values 
+    given. Each value must be unique.
+  * **placeholder** (*char*) – Char used to denote empty Cells (defaults to ‘ ‘)
+* **Raises:**
+  SudokuBuildError if invalid parameter enountered
 
 ### *exception* puzzle.PuzzleExcept(err_msg)
-
-Bases: `Exception`
-
-#### \_\_init_\_(err_msg)
-
-### *exception* puzzle.CellExcept(err_msg)
 
 Bases: `Exception`
 
@@ -48,6 +117,64 @@ Bases: `Exception`
 Bases: `Exception`
 
 #### \_\_init_\_(err_msg)
+
+### *class* puzzle.GenericPuzzleBuilder(values=None, rows=9, columns=9)
+
+Bases: [`PuzzleBuilder`](#puzzle.PuzzleBuilder)
+
+#### \_\_init_\_(values=None, rows=9, columns=9)
+
+Validates and initializes puzzle with any passed-in values.
+
+* **Parameters:**
+  * **starting_values** (*List* *of*  *(**typically* *)* *single char strings* *,* *e.g.* *,* 
+     *[* *'7'* *,* *'2'* *,* *'9'* *,* *...* *,* *'7'* *]* *that represent all* 
+    *(**typically 81* *)* *cell values in puzzle.*) – Lists of character lists to use for initial 
+    puzzle state. If nothing passed the
+    placeholder value will be used throughout.
+  * **dimension** (*int* *(**must be square* *of* *an integer* *)*) – Puzzle dimension, i.e., length of rows and columns (defaults to 9)
+  * **all_possible_values** ( *[**char* *]*) – List of all possible values if no starting values 
+    given. Each value must be unique.
+  * **placeholder** (*char*) – Char used to denote empty Cells (defaults to ‘ ‘)
+* **Raises:**
+  SudokuBuildError if invalid parameter enountered
+
+### *class* puzzle.CellIterator(cell, context_type=CellContext.NONE)
+
+Bases: `ABC`
+
+Base class for cell iterators. Extended for cell traversal within various
+contexts, e.g., rows, columns, diagonals, etc.
+
+#### *abstractmethod* \_\_init_\_(cell, context_type=CellContext.NONE)
+
+### *class* puzzle.RowIterator(cell)
+
+Bases: [`CellIterator`](#puzzle.CellIterator)
+
+Iterator for traversing a cell’s row; starts at current cell and, 
+since cells are circularly linked, breaks out of loop before 
+returning to current cell.
+
+#### \_\_init_\_(cell)
+
+### *class* puzzle.ColumnIterator(cell)
+
+Bases: [`CellIterator`](#puzzle.CellIterator)
+
+Iterator for traversing a cell’s column; starts at current cell and,
+since cells are circularly linked, breaks out of loop before returning
+to current cell.
+
+#### \_\_init_\_(cell)
+
+### *class* puzzle.LineType(\*values)
+
+Bases: `Enum`
+
+#### ROW *= 0*
+
+#### COL *= 1*
 
 ### *class* puzzle.Cell(raw_value=None, row_index=-1, column_index=-1, placeholder=' ')
 
@@ -183,6 +310,28 @@ Removes the passed values from the cell’s contents.
 * **Treturn:**
   bool
 
+### *class* puzzle.CellContext(\*values)
+
+Bases: `Enum`
+
+#### ROW *= 1*
+
+#### COLUMN *= 2*
+
+#### BOX *= 3*
+
+#### DIAGONAL_MAIN *= 4*
+
+#### DIAGONAL_MINOR *= 5*
+
+#### NONE *= 6*
+
+### *exception* puzzle.CellExcept(err_msg)
+
+Bases: `Exception`
+
+#### \_\_init_\_(err_msg)
+
 ### *class* puzzle.GenericCell(s_value)
 
 Bases: [`Cell`](#puzzle.Cell)
@@ -211,8 +360,7 @@ puzzles of the desired type.
 #### *abstractmethod* new_cell(value=None, row_index=0, column_index=0, placeholder=' ') → [Cell](#puzzle.Cell)
 
 This method will be used by corresponding “builder” classes to 
-create Cells of the proper type for the type of puzzle being
-constructed.
+create Cells for the type of puzzle being constructed.
 
 * **Parameters:**
   * **value** (*any value type*) – Cell’s value; if not placeholder Cell will be 
@@ -236,8 +384,7 @@ Bases: [`CellFactory`](#puzzle.CellFactory)
 #### new_cell(value, row=-1, column=-1, immutable=False)
 
 This method will be used by corresponding “builder” classes to 
-create Cells of the proper type for the type of puzzle being
-constructed.
+create Cells for the type of puzzle being constructed.
 
 * **Parameters:**
   * **value** (*any value type*) – Cell’s value; if not placeholder Cell will be 
@@ -252,260 +399,17 @@ constructed.
 * **Return type:**
   Object of class derived from Class
 
-### *class* puzzle.CellIterator(cell, context_type=CellContext.NONE)
+### puzzle.DEFAULT_PLACEHOLDER *= ' '*
 
-Bases: `ABC`
+If no representative value of an empty cell, i.e., placeholder, is specified a space will be used.
 
-Abstract base class for cell iterators. Extended for cell traversal within various
-contexts, e.g., rows, columns, diagonals, etc.
+### puzzle.DEFAULT_VALUE_OPTIONS *= ['1', '2', '3', '4', '5', '6', '7', '8', '9']*
 
-#### *abstractmethod* \_\_init_\_(cell, context_type=CellContext.NONE)
-
-### *class* puzzle.RowIterator(cell)
-
-Bases: [`CellIterator`](#puzzle.CellIterator)
-
-Iterator for traversing a cell’s row; starts at current cell and, 
-since cells are circularly linked, breaks out of loop before 
-returning to current cell.
-
-#### \_\_init_\_(cell)
-
-### *class* puzzle.ColumnIterator(cell)
-
-Bases: [`CellIterator`](#puzzle.CellIterator)
-
-Iterator for traversing a cell’s column; starts at current cell and,
-since cells are circularly linked, breaks out of loop before returning
-to current cell.
-
-#### \_\_init_\_(cell)
-
-### *class* puzzle.Puzzle(row_dimension, column_dimension)
-
-Bases: `object`
-
-#### \_\_init_\_(row_dimension, column_dimension)
-
-#### \_\_eq_\_(other) → bool
-
-Compares contents of all cells against the other puzzle’s cells’ contents.
-
-* **Parameters:**
-  **other** (*Puzzle class* *or* *derivative.*) – Puzzle to compare this puzzle to
-* **Returns:**
-  True if dimensions of puzzles match and all their Cells’ contents are equal
-* **Return type:**
-  bool
-
-#### as_list()
-
-Returns puzzle as list of cells’ contents.
-
-#### clear()
-
-Sets contents of all non-immutable cells to placeholder.
-
-#### empty_count()
-
-Returns the number of empty Cells, i.e., those that only contain
-the placeholder.
-
-#### add_row(row)
-
-#### max_contents_size()
-
-Returns the highest number of elements found in any Cell.
-
-#### get_random_empty()
-
-#### get_first_cell_in_row(row_number) → [Cell](#puzzle.Cell)
-
-Returns first cell in row.
-
-* **Parameters:**
-  **row_number** (*int*) – Row number (not index, i.e., starts at 1)
-* **Returns:**
-  First cell in given row
-* **Return type:**
-  [Cell](#puzzle.Cell)
-
-#### get_first_cell_in_column(column_number) → [Cell](#puzzle.Cell)
-
-Returns first cell in column.
-
-* **Parameters:**
-  **column_number** (*int*) – Column number (not index, i.e., starts at 1)
-* **Returns:**
-  First cell in given column
-* **Return type:**
-  [Cell](#puzzle.Cell)
-
-#### log_line(context=CellContext.NONE) → str
-
-Generates string representation appropriate for logging of all puzzle 
-lines of the given type.
-
-* **Parameters:**
-  **context** ([*CellContext*](#puzzle.CellContext)) – Conext, i.e., row or column, in which to generate
-  strings
-* **Raises:**
-  PuzzleExcept if invalid context passed
-
-#### puzzle_log()
-
-Returns puzzle contents in a format appropriate for logging.
-
-### *class* puzzle.PuzzleBuilder(puzzle, cell_factory, num_rows, num_columns, values=None, all_possible_values=['1', '2', '3', '4', '5', '6', '7', '8', '9'], placeholder=' ')
-
-Bases: `ABC`
-
-Base puzzle builder that performs basic setup and validation. Most of the
-details should be taken care of in derived classes.
-
-#### *abstractmethod* \_\_init_\_(puzzle, cell_factory, num_rows, num_columns, values=None, all_possible_values=['1', '2', '3', '4', '5', '6', '7', '8', '9'], placeholder=' ')
-
-Validates and initializes puzzle with any passed-in values.
-
-* **Parameters:**
-  * **starting_values** (*List* *of*  *(**typically* *)* *single char strings* *,* *e.g.* *,* 
-     *[* *'7'* *,* *'2'* *,* *'9'* *,* *...* *,* *'7'* *]* *that represent all* 
-    *(**typically 81* *)* *cell values in puzzle.*) – Lists of character lists to use for initial 
-    puzzle state. If nothing passed the
-    placeholder value will be used throughout.
-  * **dimension** (*int* *(**must be square* *of* *an integer* *)*) – Puzzle dimension, i.e., length of rows and columns (defaults to 9)
-  * **all_possible_values** ( *[**char* *]*) – List of all possible values if no starting values 
-    given. Each value must be unique.
-  * **placeholder** (*char*) – Char used to denote empty Cells (defaults to ‘ ‘)
-* **Raises:**
-  SudokuBuildError if invalid parameter enountered
-
-### *class* puzzle.GenericPuzzleBuilder(values=None, rows=9, columns=9)
-
-Bases: [`PuzzleBuilder`](#puzzle.PuzzleBuilder)
-
-#### \_\_init_\_(values=None, rows=9, columns=9)
-
-Validates and initializes puzzle with any passed-in values.
-
-* **Parameters:**
-  * **starting_values** (*List* *of*  *(**typically* *)* *single char strings* *,* *e.g.* *,* 
-     *[* *'7'* *,* *'2'* *,* *'9'* *,* *...* *,* *'7'* *]* *that represent all* 
-    *(**typically 81* *)* *cell values in puzzle.*) – Lists of character lists to use for initial 
-    puzzle state. If nothing passed the
-    placeholder value will be used throughout.
-  * **dimension** (*int* *(**must be square* *of* *an integer* *)*) – Puzzle dimension, i.e., length of rows and columns (defaults to 9)
-  * **all_possible_values** ( *[**char* *]*) – List of all possible values if no starting values 
-    given. Each value must be unique.
-  * **placeholder** (*char*) – Char used to denote empty Cells (defaults to ‘ ‘)
-* **Raises:**
-  SudokuBuildError if invalid parameter enountered
+Traditional puzzle values list to use when none is provided.
 
 ## sudoku
 
 This module extends classes defined in the puzzle module and defines new classes used for building and solving Sudoku puzzles.
-
-### sudoku.log(func, \*args)
-
-### *exception* sudoku.SudokuErrors(err_msg)
-
-Bases: `Exception`
-
-#### \_\_init_\_(err_msg)
-
-### *exception* sudoku.SudokuBuildError(err_msg)
-
-Bases: `Exception`
-
-#### \_\_init_\_(err_msg)
-
-### *class* sudoku.Status(\*values)
-
-Bases: `Enum`
-
-Used to indicate results of attempt to place value in cell.
-
-#### PASSED *= 1*
-
-#### FINISHED *= 2*
-
-#### FAILED *= 3*
-
-#### FINISHED_FAILED *= 4*
-
-### *class* sudoku.SudokuCell(value, row_index=-1, column_index=-1, placeholder=' ')
-
-Bases: [`Cell`](#puzzle.Cell)
-
-This concrete class builds upon the superclass by defining a “box” 
-context and methods to aid Sudoku puzzle solving.
-
-#### \_\_init_\_(value, row_index=-1, column_index=-1, placeholder=' ')
-
-Base ctor
-
-* **Parameters:**
-  * **raw_value** (*any value type*) – Cell’s value; if not placeholder Cell will be 
-    marked as immutable
-  * **row_index** (*int* *(**0 relative* *)*) – Index of row within puzzle matrix to place this
-    Cell; required
-  * **column_index** (*int* *(**0 relative* *)*) – Index of column within puzzle matrix to 
-    place this Cell; required
-  * **placeholder** (*char*) – Value for empty Cell (defaults to single space)
-
-#### set_next_cell_in_box(next_cell)
-
-#### get_next_cell_in_box()
-
-#### box_iter()
-
-Returns iterator for cell’s box.
-
-* **Returns:**
-  Iterator for cell’s box
-* **Return type:**
-  [BoxIterator](#sudoku.BoxIterator)
-
-#### remove_value_from_view()
-
-Remove cell’s value from all contexts, i.e., all cells within its view.
-
-#### set_box_number(box_number)
-
-#### set_if_no_conflict(value)
-
-#### value_exists_within_view(value)
-
-### *class* sudoku.SudokuCellFactory
-
-Bases: [`CellFactory`](#puzzle.CellFactory)
-
-#### \_\_init_\_()
-
-#### new_cell(value, row_index=-1, column_index=-1, placeholder=' ')
-
-This method will be used by corresponding “builder” classes to 
-create Cells of the proper type for the type of puzzle being
-constructed.
-
-* **Parameters:**
-  * **value** (*any value type*) – Cell’s value; if not placeholder Cell will be 
-    marked as immutable
-  * **row_index** (*int* *(**0 relative* *)*) – Index of row within puzzle matrix to place this
-    Cell (defaults to 0)
-  * **column_index** (*int* *(**0 relative* *)*) – Index of column within puzzle matrix to 
-    place this Cell (defaults to 0)
-  * **placeholder** (*char*) – Value for empty Cell (defaults to single space)
-* **Returns:**
-  Cell object
-* **Return type:**
-  Object of class derived from Class
-
-### *class* sudoku.BoxIterator(cell)
-
-Bases: [`CellIterator`](#puzzle.CellIterator)
-
-#### \_\_init_\_(cell)
 
 ### *class* sudoku.SudokuPuzzle(all_value_options, dimension)
 
@@ -522,20 +426,21 @@ searches, pattern operations, and other specific validation and actions.
 
 #### get_context_iterator(context_type, number)
 
-#### fill() → [Status](#sudoku.Status)
+#### fill() → [PlaceStatus](#sudoku.PlaceStatus)
 
-This method fills out a Sudoku puzzle. The puzzle may start empty
-or with any number of values. Since native randomization is pseudo-
-random, two random steps are used to increase randomization; value
-options are randomized and then assigned to random cells within
-boxes. A systematic, trial and error approach is taken, moving 
-through the boxes making assignments and applying logic to 
-determine minimum backtrack steps to optimize the process.
+This method fills out a Sudoku puzzle which may start empty or
+with any number of values. Since native randomization is pseudo-
+random, two randomizing steps are used to increase randomness;
+value options are randomized and then assigned to random cells 
+within Sudoku boxes. A systematic, trial and error approach is  
+taken, moving through the boxes making assignments and applying  
+logic to determine minimum backtrack steps to optimize the process.
 
 * **Returns:**
-  Status.FAILED returned if unable to find cell in box to place value, Status.PASSED otherwise.
+  FAILED returned if unable to find cell in box to place value,
+  PASSED otherwise.
 * **Return type:**
-  Status enum
+  PlaceStatus enum
 
 #### place_value(value, box_num, backup_count=0)
 
@@ -551,9 +456,9 @@ that a different placement will most likely be impactful.
   * **box_num** (*Integer value from 1 to puzzle dimension* *,* *typically 9.*) – Box to place the given value. Boxes are numbered from 1 to 9 (typically) starting in upper left and going right then down until eventually reaching the 9th box in the lower right.
   * **backtrack** – The number of recursion steps to go back up the call stack to redo.
 * **Returns:**
-  Status.FAILED returned if unable to find cell in box to place value, Status.PASSED otherwise.
+  FAILED returned if unable to find cell in box to place value, PASSED otherwise.
 * **Return type:**
-  Status enum
+  PlaceStatus enum
 
 #### eligible_box_cells(box_num, value)
 
@@ -570,13 +475,33 @@ neither row nor column value conflicts.
 
 #### fill_empty_cells_with_options()
 
+Helper method for solution algorithm that fills all empty cells
+with all possible values.
+
 #### normalize()
+
+Once a cell is solved this method is called to remove its value
+from all of its contexts maintaining the primary Sudoku rule that
+a value must not occur more than once in any row, column, or box.
 
 #### apply_to_all_contexts(func_to_apply)
 
 #### cells_per_value_dict(iter, min_size=1, max_size=100)
 
-#### resolve_uniques_in_context(context_type, context_number)
+#### resolve_uniques_in_context(context_type, context_number) → bool
+
+Searches all cells within passed in context for values that exist
+only once (are unique). Once a unique value is found, the containing
+cell’s contents is set to just that value (removing all other values).
+
+* **Parameters:**
+  * **context_type** (*CellContext Enum*)
+  * **context_number** (*int*) – Value from 1 to puzzle dimension that 
+    represents the context number.
+* **Returns:**
+  True if any changes were made; otherwise False.
+* **Return type:**
+  bool
 
 #### intersecting_context_resolution()
 
@@ -656,6 +581,101 @@ Bases: `object`
 #### get_puzzle()
 
 #### solve_puzzle()
+
+### *class* sudoku.BoxIterator(cell)
+
+Bases: [`CellIterator`](#puzzle.CellIterator)
+
+#### \_\_init_\_(cell)
+
+### *class* sudoku.SudokuCell(value, row_index=-1, column_index=-1, placeholder=' ')
+
+Bases: [`Cell`](#puzzle.Cell)
+
+This concrete class builds upon the superclass by defining a “box” 
+context and methods to aid Sudoku puzzle solving.
+
+#### \_\_init_\_(value, row_index=-1, column_index=-1, placeholder=' ')
+
+Base ctor
+
+* **Parameters:**
+  * **raw_value** (*any value type*) – Cell’s value; if not placeholder Cell will be 
+    marked as immutable
+  * **row_index** (*int* *(**0 relative* *)*) – Index of row within puzzle matrix to place this
+    Cell; required
+  * **column_index** (*int* *(**0 relative* *)*) – Index of column within puzzle matrix to 
+    place this Cell; required
+  * **placeholder** (*char*) – Value for empty Cell (defaults to single space)
+
+#### set_next_cell_in_box(next_cell)
+
+#### get_next_cell_in_box()
+
+#### box_iter()
+
+Returns iterator for cell’s box.
+
+* **Returns:**
+  Iterator for cell’s box
+* **Return type:**
+  [BoxIterator](#sudoku.BoxIterator)
+
+#### remove_value_from_view()
+
+Remove cell’s value from all contexts, i.e., all cells within its view.
+
+#### set_box_number(box_number)
+
+#### set_if_no_conflict(value)
+
+#### value_exists_within_view(value)
+
+### *class* sudoku.SudokuCellFactory
+
+Bases: [`CellFactory`](#puzzle.CellFactory)
+
+#### \_\_init_\_()
+
+#### new_cell(value, row_index=-1, column_index=-1, placeholder=' ')
+
+This method will be used by corresponding “builder” classes to 
+create Cells for the type of puzzle being constructed.
+
+* **Parameters:**
+  * **value** (*any value type*) – Cell’s value; if not placeholder Cell will be 
+    marked as immutable
+  * **row_index** (*int* *(**0 relative* *)*) – Index of row within puzzle matrix to place this
+    Cell (defaults to 0)
+  * **column_index** (*int* *(**0 relative* *)*) – Index of column within puzzle matrix to 
+    place this Cell (defaults to 0)
+  * **placeholder** (*char*) – Value for empty Cell (defaults to single space)
+* **Returns:**
+  Cell object
+* **Return type:**
+  Object of class derived from Class
+
+### *exception* sudoku.SudokuErrors(err_msg)
+
+Bases: `Exception`
+
+#### \_\_init_\_(err_msg)
+
+### *exception* sudoku.SudokuBuildError(err_msg)
+
+Bases: `Exception`
+
+#### \_\_init_\_(err_msg)
+
+### *class* sudoku.PlaceStatus(\*values)
+
+Bases: `Enum`
+
+Used to indicate results of attempt to place value in cell.
+
+#### PASSED *= 1*
+
+#### FAILED *= 2*
 
 ## kakuro
 

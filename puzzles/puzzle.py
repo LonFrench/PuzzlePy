@@ -7,11 +7,14 @@ import copy
 from enum import Enum, unique, auto
 import random
 
+__all__ = ['Puzzle','PuzzleBuilder','PuzzleExcept','BuildError','GenericPuzzleBuilder','CellIterator','RowIterator','ColumnIterator','LineType','Cell','CellContext','CellExcept','GenericCell','CellFactory','GenericCellFactory','DEFAULT_PLACEHOLDER','DEFAULT_VALUE_OPTIONS']
 
 # TODO: identify internal only variables/methods and add underscore ('_')to front of name
 
-default_placeholder = ' '
-default_value_options = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+DEFAULT_PLACEHOLDER = ' '
+"""If no representative value of an empty cell, i.e., placeholder, is specified a space will be used."""
+DEFAULT_VALUE_OPTIONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+"""Traditional puzzle values list to use when none is provided."""
 tab_size = 5
 
 class LineType(Enum):
@@ -49,7 +52,7 @@ class Cell(ABC):
     """
 
     @abstractmethod       # using abstract class
-    def __init__(self, raw_value = None, row_index = -1, column_index = -1, placeholder = default_placeholder):
+    def __init__(self, raw_value = None, row_index = -1, column_index = -1, placeholder = DEFAULT_PLACEHOLDER):
         """
         Base ctor
 
@@ -286,12 +289,11 @@ class CellFactory(ABC):
     puzzles of the desired type.
     """
     @abstractmethod
-    def new_cell(self, value = None, row_index = 0, column_index = 0, placeholder = default_placeholder) -> Cell:
+    def new_cell(self, value = None, row_index = 0, column_index = 0, placeholder = DEFAULT_PLACEHOLDER) -> Cell:
         """
         This method will be used by corresponding "builder" classes to 
-        create Cells of the proper type for the type of puzzle being
-        constructed.
-
+        create Cells for the type of puzzle being constructed.
+        
         :param value: Cell's value; if not placeholder Cell will be 
             marked as immutable
         :type value: any value type
@@ -317,7 +319,7 @@ class GenericCellFactory(CellFactory):
 
 class CellIterator(ABC):
     """
-    Abstract base class for cell iterators. Extended for cell traversal within various
+    Base class for cell iterators. Extended for cell traversal within various
     contexts, e.g., rows, columns, diagonals, etc.
     """
     @abstractmethod
@@ -376,7 +378,7 @@ class ColumnIterator(CellIterator):
 
         # The original cell was the first one returned. If we're back to it 
         # we've finished the circularly liked cell column list.
-        if self.next_cell == self.first_cell:      # TODO: try using "is" instead of ==
+        if self.next_cell is self.first_cell:
             self.stop = True
  
         return cell
@@ -516,33 +518,6 @@ class Puzzle:
             raise PuzzleExcept(f"Column number ({column_number}) must be between 1 and the puzzle dimension {self.dimension}, inclusive.")
         return self.matrix[0][column_number - 1]
 
-#TODO: clean up  
-    # # Returns formatted string with all cell values listed by row
-    # def rows_log_str(self):
-    #     log_str = "\n\tPuzzle rows:"
-    #     for row in range(1, self.row_dimension + 1):
-    #         log_str += f"\n\t\t\tRow {row.ljust(2," ")}:"
-
-    #         first_cell = self.get_first_cell_in_row(row)            
-    #         cell_iter = first_cell.row_iter()
-    #         for cell in cell_iter:
-    #             sorted_contents = "".join(sorted(str(cell)))     
-    #             log_str += f"    {sorted_contents}"
-    #     return log_str   
-
-    # # Returns formatted string with all cell values listed by column
-    # def columns_log_str(self):
-    #     log_str = "\n\tPuzzle columns:"
-    #     for column in range(1, self.column_dimension + 1):
-    #         log_str += f"\n\t\tColumn {column}:"
-
-    #         first_cell = self.get_first_cell_in_column(column)            
-    #         cell_iter = first_cell.column_iter()
-    #         for cell in cell_iter:
-    #             sorted_contents = "".join(sorted(str(cell)))  
-    #             log_str += f"    {sorted_contents}\t"
-    #     return log_str   
-
     # Returns formatted string with all cell values listed by row    
     def log_line(self, context = CellContext.NONE) -> str:
         """
@@ -593,7 +568,7 @@ class PuzzleBuilder(ABC):
     details should be taken care of in derived classes. 
     """
     @abstractmethod
-    def __init__(self, puzzle, cell_factory, num_rows, num_columns, values = None, all_possible_values = default_value_options, placeholder = default_placeholder):
+    def __init__(self, puzzle, cell_factory, num_rows, num_columns, values = None, all_possible_values = DEFAULT_VALUE_OPTIONS, placeholder = DEFAULT_PLACEHOLDER):
         """
         Validates and initializes puzzle with any passed-in values.
 
@@ -632,10 +607,8 @@ class PuzzleBuilder(ABC):
                     #     cell_value = values
                     #     immutable = True
                     else:
-                        # cell_value = values[column_index + row_index * num_columns]
                         cell_value = values[column_index + row_index * num_columns]
 
-                    # row.append(cell_factory.new_cell(cell_value, row_index, column_index, placeholder, immutable))
                     row.append(cell_factory.new_cell(cell_value, row_index, column_index, placeholder))
 
                 puzzle.add_row(row)

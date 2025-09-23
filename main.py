@@ -473,7 +473,7 @@ class Sudoku_old:
                 for row_i in range(len(working_puzzle_by_rows)):
                     working_puzzle_by_rows[row_i][column_index] =  cell_column[row_i]
 
-            # clean up - below is for testing only
+
             else:
                 pass
 

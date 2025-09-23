@@ -5,7 +5,6 @@ import unittest
 import test_data
 from sudoku import *
 
-#TODO: look into redirecting to output file?
 class SudokuTest(unittest.TestCase):
 
     # Tests for Sudoku parameter validation at initialization:
@@ -42,7 +41,7 @@ class SudokuTest(unittest.TestCase):
             cell = SudokuCell('12', placeholder = "x")
 
     # Tests for Sudoku puzzle creation:
-        #__init__(self, starting_values = None, dimension = 9, all_possible_values = default_value_options, placeholder = default_placeholder)
+        #__init__(self, starting_values = None, dimension = 9, all_possible_values = DEFAULT_VALUE_OPTIONS, placeholder = DEFAULT_PLACEHOLDER)
     def test_fill_empty_9x9_puzzle(self):
         builder = SudokuPuzzleBuilder()
         sudoku_puzzle = builder.get_puzzle()
@@ -105,9 +104,11 @@ class SudokuTest(unittest.TestCase):
         solution = builder.get_puzzle()
         self.assertEqual(solved_puzzle, solution)
 
-#TODO: add solution verification tests for easy and challenging puzzles
+# TODO: add solution verification tests for easy and challenging puzzles
 # TODO: add unit test(s) to populate puzzle with multi-char strings
-# class PuzzleTest(unittest.TestCase):
+
+# TODO: add tests that directly exercise Puzzle class
+#class PuzzleTest(unittest.TestCase):
 
 
 if __name__ == "__main__":

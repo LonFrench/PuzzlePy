@@ -1,4 +1,5 @@
 *.log
-/__pycache__/
-/_static/
-/_templates/
+puzzles/__pycache__/
+tests/__pycache__/
+docs/_static/
+docs/_templates/

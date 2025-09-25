@@ -2,9 +2,11 @@
 This module extends classes defined in the puzzle module and defines new classes used for building and solving Sudoku puzzles.
 """ 
 from puzzle import *
+import copy
+import random
 import math
 import logging
-from enum import Enum, auto      #, unique
+from enum import Enum, auto
 
 __all__ = ['SudokuPuzzle','SudokuPuzzleBuilder','SudokuSolver','BoxIterator','SudokuCell','SudokuCellFactory','SudokuErrors','SudokuBuildError','PlaceStatus']
 
@@ -20,17 +22,17 @@ def log(func, *args):
 
 
 class SudokuErrors(Exception):
+    """Used for general Sudoku errors."""
     def __init__(self, err_msg):
         super().__init__(err_msg)
 
 class SudokuBuildError(Exception):
+    """Used for Sudoku build related errors."""
     def __init__(self, err_msg):
         super().__init__(err_msg)
 
 class PlaceStatus(Enum):
-    """
-    Used to indicate results of attempt to place value in cell.
-    """
+    """Used to indicate results of attempt to place value in cell."""
     PASSED = auto()
     FAILED = auto()
 
@@ -65,9 +67,7 @@ class SudokuCell(Cell):
         return BoxIterator(self)
 
     def remove_value_from_view(self): 
-        """
-        Remove cell's value from all contexts, i.e., all cells within its view.
-        """          
+        """Remove cell's value from all contexts, i.e., all cells within its view."""          
         self.remove_value_from_context(self.row_iter())
         self.remove_value_from_context(self.column_iter())
         self.remove_value_from_context(self.box_iter())

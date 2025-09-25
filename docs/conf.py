@@ -20,6 +20,7 @@ extensions = [
 	'sphinx.ext.autodoc',  # Built-in extension for automatically generating documentation from docstrings
     'sphinx_rtd_theme',
     'sphinx_markdown_builder',
+    'myst_parser',
 ]
 
 templates_path = ['_templates']

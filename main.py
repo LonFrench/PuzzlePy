@@ -35,6 +35,9 @@ tab_size = 10
 BOX_LINE_SIZE = 3    # boxes are this number of cells across/high
 GRID_LINE_SIZE = 9   # puzzle is this number of cells across/high
 
+class LineType(Enum):
+    ROW = 0
+    COL = 1
 
 @unique    # using this ensures unique values are assigned to enums, makes more sense if enum values are for masks
 class TransformTypes(Enum):

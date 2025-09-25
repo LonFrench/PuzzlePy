@@ -2,7 +2,9 @@
 Unit tests for Sudoku related puzzle building and validation.
 """
 import unittest
+import copy
 import test_data
+from puzzle import *
 from sudoku import *
 
 class SudokuTest(unittest.TestCase):

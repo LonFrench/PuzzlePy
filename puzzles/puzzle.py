@@ -4,24 +4,23 @@ for implementing various types of 2-D puzzles.
 """ 
 from abc import ABC, abstractmethod
 import copy
-from enum import Enum, unique, auto
+from enum import Enum, auto, unique
 import random
 
-__all__ = ['Puzzle','PuzzleBuilder','PuzzleExcept','BuildError','GenericPuzzleBuilder','CellIterator','RowIterator','ColumnIterator','LineType','Cell','CellContext','CellExcept','GenericCell','CellFactory','GenericCellFactory','DEFAULT_PLACEHOLDER','DEFAULT_VALUE_OPTIONS']
+__all__ = ['Puzzle','PuzzleBuilder','PuzzleExcept','BuildError','GenericPuzzleBuilder','CellIterator','ColumnIterator','RowIterator','Cell','GenericCell','CellContext','CellExcept','CellFactory','GenericCellFactory','DEFAULT_PLACEHOLDER','DEFAULT_VALUE_OPTIONS']
 
 # TODO: identify internal only variables/methods and add underscore ('_')to front of name
 
 DEFAULT_PLACEHOLDER = ' '
-"""If no representative value of an empty cell, i.e., placeholder, is specified a space will be used."""
+"""Value of an empty cell (placeholder) if not specified."""
 DEFAULT_VALUE_OPTIONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-"""Traditional puzzle values list to use when none is provided."""
+"""Puzzle values list to use if one is not provided."""
 tab_size = 5
 
-class LineType(Enum):
-    ROW = 0
-    COL = 1
-
 class CellContext(Enum):
+    """
+    Cell context types.
+    """
     ROW = auto()
     COLUMN = auto()
     BOX = auto()    
@@ -29,19 +28,20 @@ class CellContext(Enum):
     DIAGONAL_MINOR = auto()   # running from right down to left
     NONE = auto()
 
-
 class PuzzleExcept(Exception):
-    def __init__(self, err_msg):
-        super().__init__(err_msg)
-
-class CellExcept(Exception):
+    """Used for general puzzle errors."""
     def __init__(self, err_msg):
         super().__init__(err_msg)
 
 class BuildError(Exception):
+    """Used for exceptions arising from puzzle build errors."""
     def __init__(self, err_msg):
         super().__init__(err_msg)
 
+class CellExcept(Exception):
+    """Used for all Cell related errors."""
+    def __init__(self, err_msg):
+        super().__init__(err_msg)
 
 class Cell(ABC):
     """
@@ -127,7 +127,7 @@ class Cell(ABC):
         :param raw_value: New cell contents
         :type raw_value: value type
         :return: True if successful (if contents not immutable); otherwise False 
-        :treturn: bool
+        :rtype: bool
         """
         if not self.immutable:
             self.contents = set(raw_value)
@@ -252,7 +252,7 @@ class Cell(ABC):
         :param value: Value to be removed
         :type value: char
         :return: True if any values removed; otherwise False
-        :treturn: bool
+        :rtype: bool
         """
         if self.immutable is True:
             return False
@@ -267,7 +267,7 @@ class Cell(ABC):
         :param value: Values to be removed
         :type value: List of chars
         :return: True if any values removed; otherwise False
-        :treturn: bool
+        :rtype: bool
         """
         if self.immutable is True:
             return False
@@ -278,6 +278,9 @@ class Cell(ABC):
 
 
 class GenericCell(Cell):
+    """
+    Basic Cell that can be instantiated for testing.
+    """
     def __init__(self, s_value):
         super().__init__(value = s_value)
 
@@ -311,6 +314,9 @@ class CellFactory(ABC):
         pass
 
 class GenericCellFactory(CellFactory):
+    """
+    Used to return basic Cell instance for testing.
+    """
     def __init__(self):
         self.type = "Generic"
 

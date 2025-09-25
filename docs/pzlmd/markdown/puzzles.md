@@ -209,7 +209,7 @@ Sets contents of cell to a set containing the passed-in raw value.
   **raw_value** (*value type*) – New cell contents
 * **Returns:**
   True if successful (if contents not immutable); otherwise False
-* **Treturn:**
+* **Return type:**
   bool
 
 #### row_iter() → [RowIterator](#puzzle.RowIterator)
@@ -296,7 +296,7 @@ Removes the passed value from the cell’s contents.
   **value** (*char*) – Value to be removed
 * **Returns:**
   True if any values removed; otherwise False
-* **Treturn:**
+* **Return type:**
   bool
 
 #### remove_values(values) → bool
@@ -307,7 +307,7 @@ Removes the passed values from the cell’s contents.
   **value** (*List* *of* *chars*) – Values to be removed
 * **Returns:**
   True if any values removed; otherwise False
-* **Treturn:**
+* **Return type:**
   bool
 
 ### *class* puzzle.CellContext(\*values)

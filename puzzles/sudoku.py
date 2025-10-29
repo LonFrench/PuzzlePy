@@ -123,7 +123,7 @@ class BoxIterator(CellIterator):
 class SudokuPuzzle(Puzzle):
     """
     This class extends Puzzle by adding Sudoku specific processing: box
-    searches, pattern operations, and other specific validation and actions.
+    searches, pattern operations, and other validation and actions.
     """
     def __init__(self, all_value_options, dimension):
 
@@ -564,7 +564,7 @@ class SudokuPuzzle(Puzzle):
                                 log(logger.debug, f"Puzzle updated:")
                                 self.puzzle_log()   #TODO: debug only, remove once working
 
-                        #   end of combo processing if block
+                        #   end of combo processing
 
                         if change_just_made:   # If context just modified leave loop and refresh the value count list
                             break
@@ -730,7 +730,7 @@ class SudokuPuzzle(Puzzle):
         return changed
 
     # Determining if the passed-in cells reside on the same row or column.
-    # Returns the line type and number
+    # Returns line type and number
     def find_shared_lines(self, cells):
         rows = set()               # using empty set to be added to later
         cols = set()
@@ -969,6 +969,9 @@ class SudokuPuzzleBuilder(PuzzleBuilder):
 class SudokuSolver():
 
     def __init__(self, puzzle):
+        if puzzle.unsolved_cell_count() == len(puzzle):
+            raise SudokuErrors("Unable to solve empty puzzle.")
+
         self.puzzle = copy.deepcopy(puzzle)
 
     def get_puzzle(self):
@@ -976,6 +979,7 @@ class SudokuSolver():
 
     def solve_puzzle(self):
         try:
+
             # fill empty cells with all possible options
             self.puzzle.fill_empty_cells_with_options()
 
@@ -985,9 +989,7 @@ class SudokuSolver():
 
             num_unsolved = self.puzzle.unsolved_cell_count()
             if num_unsolved > 0:
-                log(logger.debug, f"Still have {num_unsolved}  A cells to solve.")
-            elif num_unsolved == -1:
-                log(logger.error, "Puzzle had no initial values and so is unsolvable.")
+                log(logger.debug, f"Still have {num_unsolved} cells to solve.")
             else:
                 self.puzzle.puzzle_log()
                 return
@@ -1000,24 +1002,19 @@ class SudokuSolver():
             else:
                 return
 
-            changed = True
-            iter = 0
-            while changed:
-                iter += 1
-                changed = False
+            # Trial and error to resolve remaining cells
+            puzzle_backup = self.puzzle
+            for iter in range(0,10):
+                self.puzzle.clear_unsolved_cells()
+                status = self.puzzle.fill()
+                if status == PlaceStatus.PASSED:
+                    log(logger.debug, f"{iter} trial and error attempt(s) required to solve puzzle.")
+                    break
 
-                #Look at bi-context intersections
-                log(logger.debug, f"SudokuSolver() iteration {iter} of intersecting_context_resolution()")
-                changed = self.puzzle.intersecting_context_resolution()
+                self.puzzle = puzzle_backup
 
-                log(logger.debug, f"SudokuSolver() iteration {iter} of  combination_reduction()")
 
-                changed = self.puzzle.apply_to_all_contexts(self.puzzle.combo_reduction)
-                self.puzzle.puzzle_log()
-
-            #   End of while changed loop
-
-            log(logger.debug, f"Still have {num_unsolved} C cells to solve.")
+            log(logger.info, f"Puzzle was {"successfully" if status == PlaceStatus.PASSED else "not"} solved.")
 
         except Exception as ex:
             raise SudokuErrors(f"Exception while solving sudoku puzzle {ex}.")

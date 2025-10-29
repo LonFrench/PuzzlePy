@@ -2,7 +2,6 @@
 Unit tests for Sudoku related puzzle building and validation.
 """
 import unittest
-import copy
 import test_data
 from puzzle import *
 from sudoku import *
@@ -65,6 +64,13 @@ class SudokuTest(unittest.TestCase):
         self.assertEqual(solved_puzzle.unsolved_cell_count(),0)
 
     # Tests for Sudoku puzzle solution:
+    def test_solve_empty(self):
+        with self.assertRaises(SudokuErrors):
+            builder = SudokuPuzzleBuilder(test_data.empty_9x9_puzzle, placeholder = " ")
+            sudoku_puzzle = builder.get_puzzle()
+            sudoku_solver = SudokuSolver(sudoku_puzzle)
+            sudoku_solver.solve_puzzle()
+
     def test_solve_easy(self):
         builder = SudokuPuzzleBuilder(test_data.easy_puzzle_21, placeholder = " ")
         sudoku_puzzle = builder.get_puzzle()
@@ -96,13 +102,24 @@ class SudokuTest(unittest.TestCase):
         self.assertEqual(sudoku_puzzle.unsolved_cell_count(),0)
 
     def test_verify_difficult_solution(self):
-        builder = SudokuPuzzleBuilder(test_data.hard_puzzle, placeholder = ' ')
+        builder = SudokuPuzzleBuilder(test_data.hard_puzzle_189, placeholder = ' ')
         puzzle = builder.get_puzzle()
         solver = SudokuSolver(puzzle)
         solver.solve_puzzle()
         solved_puzzle = solver.get_puzzle()
 
-        builder = SudokuPuzzleBuilder(test_data.hard_puzzle_solved, placeholder = ' ')
+        builder = SudokuPuzzleBuilder(test_data.hard_puzzle_189_solved, placeholder = ' ')
+        solution = builder.get_puzzle()
+        self.assertEqual(solved_puzzle, solution)
+
+    def test_verify_challenging_solution(self):
+        builder = SudokuPuzzleBuilder(test_data.chal_puzzle_262, placeholder = ' ')
+        puzzle = builder.get_puzzle()
+        solver = SudokuSolver(puzzle)
+        solver.solve_puzzle()
+        solved_puzzle = solver.get_puzzle()
+
+        builder = SudokuPuzzleBuilder(test_data.chal_puzzle_262_solved, placeholder = ' ')
         solution = builder.get_puzzle()
         self.assertEqual(solved_puzzle, solution)
 

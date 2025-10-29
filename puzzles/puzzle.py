@@ -225,6 +225,13 @@ class Cell(ABC):
         if not self.immutable:
             self.contents = {self._placeholder}
 
+    def clear_if_unsolved(self):
+        """
+        For multi-value cells, replaces contents with placeholder.
+        """
+        if not self.immutable and len(self.contents) > 1:
+            self.contents = {self._placeholder}
+
     # Returns True if a change was made
     def remove_all_but(self, keepers) -> bool:
         """
@@ -412,8 +419,10 @@ class Puzzle:
     #     pass
 
 
-#TODO: determine what this would be needed
     def __len__(self):
+        """   
+        Returns the number of cells in puzzle.
+        """
         return self.length
 
     def __setitem__(self, indices, value):       # Using tuple to pass in row and column indices
@@ -460,6 +469,14 @@ class Puzzle:
             for cell in row:
                 cell.clear()
 
+    def clear_unsolved_cells(self):
+        """
+        Sets contents of cells that have not been solved, i.e., not single valued, to placeholder.
+        """
+        for row in self.matrix:
+            for cell in row:
+                cell.clear_if_unsolved()
+ 
     def empty_count(self):
         """ 
         Returns the number of empty Cells, i.e., those that only contain

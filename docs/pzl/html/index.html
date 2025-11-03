@@ -81,12 +81,13 @@
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.__eq__"><code class="docutils literal notranslate"><span class="pre">Puzzle.__eq__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.as_list"><code class="docutils literal notranslate"><span class="pre">Puzzle.as_list()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.clear"><code class="docutils literal notranslate"><span class="pre">Puzzle.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.clear_unsolved_cells"><code class="docutils literal notranslate"><span class="pre">Puzzle.clear_unsolved_cells()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.empty_count"><code class="docutils literal notranslate"><span class="pre">Puzzle.empty_count()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.add_row"><code class="docutils literal notranslate"><span class="pre">Puzzle.add_row()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.max_contents_size"><code class="docutils literal notranslate"><span class="pre">Puzzle.max_contents_size()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.get_random_empty"><code class="docutils literal notranslate"><span class="pre">Puzzle.get_random_empty()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.get_first_cell_in_row"><code class="docutils literal notranslate"><span class="pre">Puzzle.get_first_cell_in_row()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.get_first_cell_in_column"><code class="docutils literal notranslate"><span class="pre">Puzzle.get_first_cell_in_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.first_cell_in_row"><code class="docutils literal notranslate"><span class="pre">Puzzle.first_cell_in_row()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.first_cell_in_column"><code class="docutils literal notranslate"><span class="pre">Puzzle.first_cell_in_column()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.log_line"><code class="docutils literal notranslate"><span class="pre">Puzzle.log_line()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Puzzle.puzzle_log"><code class="docutils literal notranslate"><span class="pre">Puzzle.puzzle_log()</span></code></a></li>
 </ul>
@@ -111,17 +112,12 @@
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.CellIterator.__init__"><code class="docutils literal notranslate"><span class="pre">CellIterator.__init__()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="puzzles.html#puzzle.RowIterator"><code class="docutils literal notranslate"><span class="pre">RowIterator</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.RowIterator.__init__"><code class="docutils literal notranslate"><span class="pre">RowIterator.__init__()</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="puzzles.html#puzzle.ColumnIterator"><code class="docutils literal notranslate"><span class="pre">ColumnIterator</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.ColumnIterator.__init__"><code class="docutils literal notranslate"><span class="pre">ColumnIterator.__init__()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="puzzles.html#puzzle.LineType"><code class="docutils literal notranslate"><span class="pre">LineType</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.LineType.ROW"><code class="docutils literal notranslate"><span class="pre">LineType.ROW</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.LineType.COL"><code class="docutils literal notranslate"><span class="pre">LineType.COL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="puzzles.html#puzzle.RowIterator"><code class="docutils literal notranslate"><span class="pre">RowIterator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.RowIterator.__init__"><code class="docutils literal notranslate"><span class="pre">RowIterator.__init__()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="puzzles.html#puzzle.Cell"><code class="docutils literal notranslate"><span class="pre">Cell</span></code></a><ul>
@@ -135,9 +131,14 @@
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Cell.value_in_context"><code class="docutils literal notranslate"><span class="pre">Cell.value_in_context()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Cell.remove_value_from_context"><code class="docutils literal notranslate"><span class="pre">Cell.remove_value_from_context()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Cell.clear"><code class="docutils literal notranslate"><span class="pre">Cell.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Cell.clear_if_unsolved"><code class="docutils literal notranslate"><span class="pre">Cell.clear_if_unsolved()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Cell.remove_all_but"><code class="docutils literal notranslate"><span class="pre">Cell.remove_all_but()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Cell.remove_value"><code class="docutils literal notranslate"><span class="pre">Cell.remove_value()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.Cell.remove_values"><code class="docutils literal notranslate"><span class="pre">Cell.remove_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="puzzles.html#puzzle.GenericCell"><code class="docutils literal notranslate"><span class="pre">GenericCell</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.GenericCell.__init__"><code class="docutils literal notranslate"><span class="pre">GenericCell.__init__()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="puzzles.html#puzzle.CellContext"><code class="docutils literal notranslate"><span class="pre">CellContext</span></code></a><ul>
@@ -151,10 +152,6 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="puzzles.html#puzzle.CellExcept"><code class="docutils literal notranslate"><span class="pre">CellExcept</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.CellExcept.__init__"><code class="docutils literal notranslate"><span class="pre">CellExcept.__init__()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="puzzles.html#puzzle.GenericCell"><code class="docutils literal notranslate"><span class="pre">GenericCell</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#puzzle.GenericCell.__init__"><code class="docutils literal notranslate"><span class="pre">GenericCell.__init__()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="puzzles.html#puzzle.CellFactory"><code class="docutils literal notranslate"><span class="pre">CellFactory</span></code></a><ul>
@@ -171,41 +168,42 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="puzzles.html#module-sudoku">sudoku</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.__init__"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.__init__()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.get_box_dimension"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.get_box_dimension()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.get_first_cell_in_box"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.get_first_cell_in_box()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.get_context_iterator"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.get_context_iterator()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.fill"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.fill()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.place_value"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.place_value()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.eligible_box_cells"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.eligible_box_cells()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.fill_empty_cells_with_options"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.fill_empty_cells_with_options()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.normalize"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.normalize()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.apply_to_all_contexts"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.apply_to_all_contexts()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.cells_per_value_dict"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.cells_per_value_dict()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.resolve_uniques_in_context"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.resolve_uniques_in_context()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.intersecting_context_resolution"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.intersecting_context_resolution()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.find_intersection_with_box"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.find_intersection_with_box()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.combo_reduction"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.combo_reduction()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.find_combination2"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.find_combination2()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.find_combination"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.find_combination()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.remove_values_from_context"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.remove_values_from_context()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.remove_value_from_context"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.remove_value_from_context()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.find_shared_lines"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.find_shared_lines()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.unsolved_cell_count"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.unsolved_cell_count()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzle.puzzle_log"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzle.puzzle_log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="puzzles.html#sudoku.Sudoku"><code class="docutils literal notranslate"><span class="pre">Sudoku</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.__init__"><code class="docutils literal notranslate"><span class="pre">Sudoku.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.get_box_dimension"><code class="docutils literal notranslate"><span class="pre">Sudoku.get_box_dimension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.first_cell_in_box"><code class="docutils literal notranslate"><span class="pre">Sudoku.first_cell_in_box()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.get_context_iterator"><code class="docutils literal notranslate"><span class="pre">Sudoku.get_context_iterator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.fill"><code class="docutils literal notranslate"><span class="pre">Sudoku.fill()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.backup_count"><code class="docutils literal notranslate"><span class="pre">Sudoku.backup_count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.place_value"><code class="docutils literal notranslate"><span class="pre">Sudoku.place_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.eligible_box_cells"><code class="docutils literal notranslate"><span class="pre">Sudoku.eligible_box_cells()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.fill_empty_cells_with_options"><code class="docutils literal notranslate"><span class="pre">Sudoku.fill_empty_cells_with_options()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.normalize"><code class="docutils literal notranslate"><span class="pre">Sudoku.normalize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.apply_to_all_contexts"><code class="docutils literal notranslate"><span class="pre">Sudoku.apply_to_all_contexts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.cells_per_value_dict"><code class="docutils literal notranslate"><span class="pre">Sudoku.cells_per_value_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.resolve_uniques_in_context"><code class="docutils literal notranslate"><span class="pre">Sudoku.resolve_uniques_in_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.intersecting_context_resolution"><code class="docutils literal notranslate"><span class="pre">Sudoku.intersecting_context_resolution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.find_intersection_with_box"><code class="docutils literal notranslate"><span class="pre">Sudoku.find_intersection_with_box()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.combo_reduction"><code class="docutils literal notranslate"><span class="pre">Sudoku.combo_reduction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.find_combination2"><code class="docutils literal notranslate"><span class="pre">Sudoku.find_combination2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.find_combination"><code class="docutils literal notranslate"><span class="pre">Sudoku.find_combination()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.remove_values_from_context"><code class="docutils literal notranslate"><span class="pre">Sudoku.remove_values_from_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.remove_value_from_context"><code class="docutils literal notranslate"><span class="pre">Sudoku.remove_value_from_context()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.find_shared_lines"><code class="docutils literal notranslate"><span class="pre">Sudoku.find_shared_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.unsolved_cell_count"><code class="docutils literal notranslate"><span class="pre">Sudoku.unsolved_cell_count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.Sudoku.puzzle_log"><code class="docutils literal notranslate"><span class="pre">Sudoku.puzzle_log()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzleBuilder"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzleBuilder</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzleBuilder.__init__"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzleBuilder.__init__()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzleBuilder.validate_dimension"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzleBuilder.validate_dimension()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuPuzzleBuilder.get_puzzle"><code class="docutils literal notranslate"><span class="pre">SudokuPuzzleBuilder.get_puzzle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="puzzles.html#sudoku.SudokuBuilder"><code class="docutils literal notranslate"><span class="pre">SudokuBuilder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuBuilder.__init__"><code class="docutils literal notranslate"><span class="pre">SudokuBuilder.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuBuilder.validate_dimension"><code class="docutils literal notranslate"><span class="pre">SudokuBuilder.validate_dimension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuBuilder.get_puzzle"><code class="docutils literal notranslate"><span class="pre">SudokuBuilder.get_puzzle()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="puzzles.html#sudoku.SudokuSolver"><code class="docutils literal notranslate"><span class="pre">SudokuSolver</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuSolver.__init__"><code class="docutils literal notranslate"><span class="pre">SudokuSolver.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuSolver.get_puzzle"><code class="docutils literal notranslate"><span class="pre">SudokuSolver.get_puzzle()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuSolver.solve_puzzle"><code class="docutils literal notranslate"><span class="pre">SudokuSolver.solve_puzzle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#sudoku.SudokuSolver.solve"><code class="docutils literal notranslate"><span class="pre">SudokuSolver.solve()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="puzzles.html#sudoku.BoxIterator"><code class="docutils literal notranslate"><span class="pre">BoxIterator</span></code></a><ul>
@@ -250,24 +248,26 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="puzzles.html#module-tests.test_puzzles">test_puzzles</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest"><code class="docutils literal notranslate"><span class="pre">SudokuTest</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_build_exception_invalid_dimension"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_build_exception_invalid_dimension()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_build_exception_all_values_dimension_size_mismatch"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_build_exception_all_values_dimension_size_mismatch()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_build_exception_invalid_all_values_size"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_build_exception_invalid_all_values_size()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_build_exception_invalid_placeholder"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_build_exception_invalid_placeholder()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_build_exception_invalid_all_values_container"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_build_exception_invalid_all_values_container()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_cell_creation_no_indices"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_cell_creation_no_indices()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_cell_creation_bad_index"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_cell_creation_bad_index()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_cell_creation_val_too_large"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_cell_creation_val_too_large()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_fill_empty_9x9_puzzle"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_fill_empty_9x9_puzzle()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_fill_empty_16x16_puzzle"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_fill_empty_16x16_puzzle()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_alternate_placeholder"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_alternate_placeholder()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_solve_easy"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_solve_easy()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_solve_difficult"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_solve_difficult()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_solve_challenging"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_solve_challenging()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_fill_partial"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_fill_partial()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.test_puzzles.SudokuTest.test_verify_difficult_solution"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_verify_difficult_solution()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="puzzles.html#module-tests.tests">test_puzzles</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest"><code class="docutils literal notranslate"><span class="pre">SudokuTest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_build_exception_invalid_dimension"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_build_exception_invalid_dimension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_build_exception_all_values_dimension_size_mismatch"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_build_exception_all_values_dimension_size_mismatch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_build_exception_invalid_all_values_size"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_build_exception_invalid_all_values_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_build_exception_invalid_placeholder"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_build_exception_invalid_placeholder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_build_exception_invalid_all_values_container"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_build_exception_invalid_all_values_container()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_cell_creation_no_indices"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_cell_creation_no_indices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_cell_creation_bad_index"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_cell_creation_bad_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_cell_creation_val_too_large"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_cell_creation_val_too_large()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_fill_empty_9x9_puzzle"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_fill_empty_9x9_puzzle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_fill_empty_16x16_puzzle"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_fill_empty_16x16_puzzle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_alternate_placeholder"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_alternate_placeholder()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_solve_empty"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_solve_empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_solve_easy"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_solve_easy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_solve_difficult"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_solve_difficult()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_solve_challenging"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_solve_challenging()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_fill_partial"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_fill_partial()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_verify_difficult_solution"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_verify_difficult_solution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="puzzles.html#tests.tests.SudokuTest.test_verify_challenging_solution"><code class="docutils literal notranslate"><span class="pre">SudokuTest.test_verify_challenging_solution()</span></code></a></li>
 </ul>
 </li>
 </ul>

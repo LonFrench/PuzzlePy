@@ -20,7 +20,6 @@ extensions = [
 	'sphinx.ext.autodoc',  # Built-in extension for automatically generating documentation from docstrings
     'sphinx_rtd_theme',
     'sphinx_markdown_builder',
-    'myst_parser',
 ]
 
 templates_path = ['_templates']
@@ -30,7 +29,7 @@ sys.path.insert(0, 'C:/Lonnie/HeadGamz/Website/puzzlepy/puzzles')
 autoapi_dirs = ['../puzzles']
 
 # exclude the below modules from document
-autodoc_mock_imports = ['test_data', 'server_ui', 'sudoku_drawing']
+autodoc_mock_imports = ['ut_data', 'server_ui', 'sudoku_drawing']
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

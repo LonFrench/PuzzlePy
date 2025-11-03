@@ -8,7 +8,9 @@ import math
 import logging
 from enum import Enum, auto
 
-__all__ = ['SudokuPuzzle','SudokuPuzzleBuilder','SudokuSolver','BoxIterator','SudokuCell','SudokuCellFactory','SudokuErrors','SudokuBuildError','PlaceStatus']
+# TODO: test w/ letters & special chars to ensure cell contents are agnostic; update docstrings to reflect that passed values aren't integers.
+
+__all__ = ['Sudoku','SudokuBuilder','SudokuSolver','BoxIterator','SudokuCell','SudokuCellFactory','SudokuErrors','SudokuBuildError','PlaceStatus']
 
 logger = logging.getLogger(__name__)    # logger uses name of module
 logging.basicConfig(filename="builder.log", 
@@ -120,9 +122,9 @@ class BoxIterator(CellIterator):
  
         return cell
 
-class SudokuPuzzle(Puzzle):
+class Sudoku(Puzzle):
     """
-    This class extends Puzzle by adding Sudoku specific processing: box
+    Extends Puzzle by adding Sudoku specific processing: box
     searches, pattern operations, and other validation and actions.
     """
     def __init__(self, all_value_options, dimension):
@@ -142,7 +144,7 @@ class SudokuPuzzle(Puzzle):
 
     # Param is box number with the upper left being #1 down to the last on in the lower right
     # Returns the upper left cell of box
-    def get_first_cell_in_box(self, box_number):
+    def first_cell_in_box(self, box_number):
         if box_number < 1 and box_number > self.dimension:
             raise PuzzleExcept(f"Box number ({box_number}) must be between 1 and the puzzle dimension {self.dimension}.")
 
@@ -153,22 +155,22 @@ class SudokuPuzzle(Puzzle):
     def get_context_iterator(self, context_type, number):
 
         if context_type == CellContext.ROW:
-            first_cell = self.get_first_cell_in_row(number)            
+            first_cell = self.first_cell_in_row(number)            
             return first_cell.row_iter()
 
         if context_type == CellContext.COLUMN:
-            first_cell = self.get_first_cell_in_column(number)            
+            first_cell = self.first_cell_in_column(number)            
             return first_cell.column_iter()
 
         if context_type == CellContext.BOX:
-            first_cell = self.get_first_cell_in_box(number)            
+            first_cell = self.first_cell_in_box(number)            
             return first_cell.box_iter()
         
         return None
 
     def fill(self) -> PlaceStatus:
         """
-        This method fills out a Sudoku puzzle which may start empty or
+        Fills out a Sudoku puzzle which may start empty or
         with any number of values. Since native randomization is pseudo-
         random, two randomizing steps are used to increase randomness;
         value options are randomized and then assigned to random cells 
@@ -187,15 +189,15 @@ class SudokuPuzzle(Puzzle):
 
             for attempt in range(1, 1000):   # 8 is plenty when starting from scratch
                 for val in rand_vals:
-                    log(logger.debug, f"SudokuPuzzle.fill() Attempting to place {val} ...")   
+                    log(logger.debug, f"Sudoku.fill() Attempting to place {val} ...")   
                     status, cnt = self.place_value(val, 1)
 
                     if status == PlaceStatus.PASSED:
-                        log(logger.debug, f"SudokuPuzzle.fill() Successfully placed all {val}s.")
+                        log(logger.debug, f"Sudoku.fill() Successfully placed all {val}s.")
                         log(logger.info, self.puzzle_log())
                     else:
                         log(logger.info, self.puzzle_log())
-                        log(logger.warning, f"SudokuPuzzle.fill() Attempt {attempt} failed; starting over...")
+                        log(logger.warning, f"Sudoku.fill() Attempt {attempt} failed; starting over...")
                         self.clear()
                         break
 
@@ -204,14 +206,20 @@ class SudokuPuzzle(Puzzle):
 
             return status
         except Exception as ex:
-            raise PuzzleExcept(f"SudokuPuzzle.place_value() {ex}.")
+            raise PuzzleExcept(f"Sudoku.place_value() {ex}.")
+
+
+    def backup_count(self, box_num):
+        """ Compute how many steps to backtrack based on position within puzzle."""
+# clean up:   get_backup_count = lambda: self.box_dimension if box_num % self.box_dimension == 1 else 1
+        return self.box_dimension if box_num % self.box_dimension == 1 else 1
 
     #
     # TODO: use self.dimension to stop recursion
     #
     def place_value(self, value, box_num, backup_count = 0):
         """
-        Recursively called method that places given value in the given puzzle
+        Recursive method that places given value in the given
         box. If a value can't be placed the number of recursive steps to back
         up will be returned. The value is constant during this process but
         the box number is incremented for each call. Number of backup steps
@@ -219,7 +227,7 @@ class SudokuPuzzle(Puzzle):
         that a different placement will most likely be impactful.
 
         :parameter value: Value to place.
-        :type value: Usually an integer, but could be anything.
+        :type value: Usually an integer, but could be any character.
         :parameter box_num: Box to place the given value. Boxes are numbered from 1 to 9 (typically) starting in upper left and going right then down until eventually reaching the 9th box in the lower right.
         :type box_num: Integer value from 1 to puzzle dimension, typically 9.
         :parameter backtrack: The number of recursion steps to go back up the call stack to redo.
@@ -229,21 +237,21 @@ class SudokuPuzzle(Puzzle):
         :rtype: PlaceStatus enum
         """
         try:
-            log(logger.debug, f"SudokuPuzzle.place_value() attempting to place {value} in box #{box_num}.")   
-            get_backup_count = lambda: self.box_dimension if box_num % self.box_dimension == 1 else 1
+            log(logger.debug, f"Sudoku.place_value() attempting to place {value} in box #{box_num}.")   
+            # clean up backup_count =   lambda: self.box_dimension if box_num % self.box_dimension == 1 else 1
 
             eligible_cells = self.eligible_box_cells(box_num, value)
-            log(logger.debug, f"SudokuPuzzle.place_value() value {value}, box #{box_num}, eligible_cells size is {len(eligible_cells)}.")   
+            log(logger.debug, f"Sudoku.place_value() value {value}, box #{box_num}, eligible_cells size is {len(eligible_cells)}.")   
             if len(eligible_cells) == 0:
-                backup_count = get_backup_count()
-                log(logger.debug, f"SudokuPuzzle.place_value() Failed to find any eligible cells in box #{box_num} to place a {value}, backing up {backup_count} step(s).")   
+                backup_count = self.backup_count(box_num)
+                log(logger.debug, f"Sudoku.place_value() Failed to find any eligible cells in box #{box_num} to place a {value}, backing up {backup_count} step(s).")   
 
 
                 return PlaceStatus.FAILED, backup_count   
 # !!!!! TODO: review this logic for encountering box that already has value in it            
             # This covers the case where box was initialized with this value and so doesn't need to be set
             elif len(eligible_cells) == 1 and value in eligible_cells[0].contents:
-                log(logger.debug, f"SudokuPuzzle.place_value() {value} already exists in box #{box_num}.")   
+                log(logger.debug, f"Sudoku.place_value() {value} already exists in box #{box_num}.")   
                 if box_num == self.dimension:
                     return PlaceStatus.PASSED, 0
                 status, backup_count = self.place_value(value, box_num + 1)
@@ -251,7 +259,7 @@ class SudokuPuzzle(Puzzle):
 
                 # Can't make changes here, but continue backtracking to a box where it can make a difference
                 if backup_count == 0:
-                    backup_count = get_backup_count()
+                    backup_count = self.backup_count(box_num)
 #TODO: determine:
 # should a bakcup_count decrement still happen, and if == 0 set to 1?
 
@@ -261,9 +269,9 @@ class SudokuPuzzle(Puzzle):
             rand_eligible_cells = random.sample(eligible_cells, len(eligible_cells))
 
             for ndx in range(len(rand_eligible_cells) - 1, -1, -1):
-                log(logger.debug, f"SudokuPuzzle.place_value() setting {value} in box #{box_num}.")   
+                log(logger.debug, f"Sudoku.place_value() setting {value} in box #{box_num}.")   
                 if not rand_eligible_cells[ndx].set(value):
-                    log(logger.debug, f"SudokuPuzzle.place_value() Cell is immutable; unable to set value.")   
+                    log(logger.debug, f"Sudoku.place_value() Cell is immutable; unable to set value.")   
                
                 # Successfully placed value throughout puzzle, return up the recursion stack
                 if box_num == self.dimension:
@@ -283,15 +291,15 @@ class SudokuPuzzle(Puzzle):
 
                 # Remove last candidate cell since it didn't turn out so well
                 del rand_eligible_cells[ndx]
-                log(logger.debug, f"SudokuPuzzle.place_value() Length of box #{box_num} eligible cells is {len(rand_eligible_cells)}.")   
+                log(logger.debug, f"Sudoku.place_value() Length of box #{box_num} eligible cells is {len(rand_eligible_cells)}.")   
 
             # End of loop
 
-            backup_count = get_backup_count()
-            log(logger.debug, f"SudokuPuzzle.place_value() Failed to place {value} in box #{box_num}, backing up {backup_count} step(s).")   
+            backup_count = self.backup_count(box_num)
+            log(logger.debug, f"Sudoku.place_value() Failed to place {value} in box #{box_num}, backing up {backup_count} step(s).")   
             return PlaceStatus.FAILED, backup_count
         except Exception as ex:
-            raise PuzzleExcept(f"SudokuPuzzle.place_value() {ex}.")
+            raise PuzzleExcept(f"Sudoku.place_value() {ex}.")
 
     def eligible_box_cells(self, box_num, value):
         """
@@ -299,9 +307,9 @@ class SudokuPuzzle(Puzzle):
         neither row nor column value conflicts.
         
         :parameter box_num: Number of box for which to build list.
-        :type box_num: int from 1 to dimension
+        :type box_num: int from 1 to dimension inclusive
         :parameter value: Value for which to ensure there are no conflicts.
-        :type value: int (typically, but could be anything)
+        :type value: int (typically, but could be any character)
         :return: List of Cells without row/column value conflicts
         :rtype: Cell list
         """
@@ -328,7 +336,7 @@ class SudokuPuzzle(Puzzle):
                 
             return open_cells
         except Exception as ex:
-            raise PuzzleExcept(f"SudokuPuzzle.eligible_box_cells() {ex}.")
+            raise PuzzleExcept(f"Sudoku.eligible_box_cells() {ex}.")
 
     def fill_empty_cells_with_options(self):
         """
@@ -336,7 +344,7 @@ class SudokuPuzzle(Puzzle):
         with all possible values.
         """
         for row in range(1, self.row_dimension + 1):
-            first_cell = self.get_first_cell_in_row(row)            
+            first_cell = self.first_cell_in_row(row)            
             cell_iter = first_cell.row_iter()
             for cell in cell_iter:
                 if cell.empty():
@@ -349,7 +357,7 @@ class SudokuPuzzle(Puzzle):
         a value must not occur more than once in any row, column, or box.
         """
         for row in range(1, self.dimension + 1):
-            first_cell = self.get_first_cell_in_row(row)            
+            first_cell = self.first_cell_in_row(row)            
 
             # For each "solved" cell, search through all the cell's contexts and remove instances of the given value
             cell_iter = first_cell.row_iter()
@@ -443,13 +451,13 @@ class SudokuPuzzle(Puzzle):
         while change_made:            # For each row in puzzle ...
             change_made = False
             for row_num in range(1, self.dimension + 1):
-                first_cell = self.get_first_cell_in_row(row_num)            
+                first_cell = self.first_cell_in_row(row_num)            
                 cell_iter = first_cell.row_iter()
                 change_made =  self.find_intersection_with_box(cell_iter) or change_made
 
             # For each column in puzzle ...
             for column_num in range(1, self.dimension + 1):
-                first_cell = self.get_first_cell_in_column(column_num)            
+                first_cell = self.first_cell_in_column(column_num)            
                 cell_iter = first_cell.column_iter()
                 change_made = self.find_intersection_with_box(cell_iter) or change_made
 
@@ -494,12 +502,12 @@ class SudokuPuzzle(Puzzle):
 
         return changed
 
-    
-    # Identify value combinations within a context and use to remove extraneous values
     def combo_reduction(self, context_type, context_number):
-
+        """
+        Identify value combinations within a context and use to remove extraneous values.
+        """
         log(logger.debug, f"Original puzzle:")
-        self.puzzle_log()   #TODO: debug only, remove once working
+        # Debug only: self.puzzle_log()
         change_made = False
         try:
             combo_size_max = 1
@@ -523,7 +531,7 @@ class SudokuPuzzle(Puzzle):
                 while True:
                     change_just_made = False
 
-                    for subject_value, cells in cells_per_value.items():          #using dictionary iteration
+                    for subject_value, cells in cells_per_value.items():      # using dictionary iteration
 
                         # Only interested in values that have a certain number/range of occurances
 
@@ -533,7 +541,7 @@ class SudokuPuzzle(Puzzle):
 
                         # Start the list of values with the "subject" value; this will be built upon in the following loop(s) 
                         value_collection = {subject_value} 
-                        cell_set = cells.copy()          #using ".copy()" instead of just ".copy" for shallow copy
+                        cell_set = cells.copy()          # using ".copy()" instead of just ".copy" for shallow copy
                         cell_set = set()
 
                         log(logger.debug, f"\ncombo_reduction() calling find_combination() with value {subject_value}")
@@ -742,7 +750,7 @@ class SudokuPuzzle(Puzzle):
         # working_options_dict[value_key].append(cell)
 
         if len(rows) == 1 and len(cols) == 1:
-            raise PuzzleExcept("SudokuPuzzle.get_shared_lines() found rows and columns cannot both have length 1.")
+            raise PuzzleExcept("Sudoku.get_shared_lines() found rows and columns cannot both have length 1.")
 
         if len(rows) == 1:
             return CellContext.ROW, list(rows)[0]
@@ -796,7 +804,7 @@ class SudokuPuzzle(Puzzle):
             # Ensure row contents start at the same place regardless of number of digits in row number
             log_str += f"{row_label.ljust(total_prefix_len, contents_spacer)}{box_spacer}"  
 
-            first_cell = self.get_first_cell_in_row(row)            
+            first_cell = self.first_cell_in_row(row)            
             cell_iter = first_cell.row_iter()
             column_cntr = 1
             for cell in cell_iter:
@@ -818,7 +826,7 @@ class SudokuPuzzle(Puzzle):
         return log_str   
 
 
-class SudokuPuzzleBuilder(PuzzleBuilder):
+class SudokuBuilder(PuzzleBuilder):
     """
     Creates a matrix of Sudoku cells that are circularly linked per 
     the 3 relevant Sudoku contexts; row, column, box.
@@ -847,7 +855,7 @@ class SudokuPuzzleBuilder(PuzzleBuilder):
 
             # Validate passed-in puzzle
             if starting_values != None:
-                log(logger.debug, f"SudokuPuzzleBuilder() applying initial value list; ignoring dimension and value options parameters.")
+                log(logger.debug, f"SudokuBuilder() applying initial value list; ignoring dimension and value options parameters.")
 
                 if not isinstance(starting_values, list):
                     raise SudokuBuildError("Parameter starting_values must be list.")
@@ -888,7 +896,7 @@ class SudokuPuzzleBuilder(PuzzleBuilder):
                     raise SudokuBuildError(f"Number of possible values ({len(all_possible_values)}) must match dimension ({dimension}) of Sudoku puzzle.")
 
             # Create cells to hold all initial puzzle values (or placeholder if no data provided)
-            puzzle = SudokuPuzzle(all_possible_values, dimension)
+            puzzle = Sudoku(all_possible_values, dimension)
 
             cell_factory = SudokuCellFactory()
 
@@ -931,7 +939,7 @@ class SudokuPuzzleBuilder(PuzzleBuilder):
             self.puzzle = puzzle
  
         except Exception as ex:
-            raise SudokuBuildError(f"SudokuPuzzleBuilder(): {ex}")
+            raise SudokuBuildError(f"SudokuBuilder(): {ex}")
 
     def validate_dimension(self, dimension) -> int:
         """
@@ -954,10 +962,10 @@ class SudokuPuzzleBuilder(PuzzleBuilder):
         
         return dimension
 
-    def get_puzzle(self) -> SudokuPuzzle:
+    def get_puzzle(self) -> Sudoku:
         """
         :return: Deep copy of puzzle.
-        :rtype: SudokuPuzzle object
+        :rtype: Sudoku object
         """
 #TODO: determine impact of returning deep copy here; is it even necessary?
         return self.puzzle
@@ -977,7 +985,7 @@ class SudokuSolver():
     def get_puzzle(self):
         return self.puzzle
 
-    def solve_puzzle(self):
+    def solve(self):
         try:
 
             # fill empty cells with all possible options

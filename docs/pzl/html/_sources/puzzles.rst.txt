@@ -31,7 +31,7 @@ kakuro
 test\_puzzles
 -------------
 
-.. automodule:: tests.test_puzzles
+.. automodule:: tests.tests
    :members:
    :show-inheritance:
    :undoc-members:

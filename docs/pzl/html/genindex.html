@@ -125,6 +125,10 @@
 </li>
         <li><a href="puzzles.html#sudoku.BoxIterator.__init__">(sudoku.BoxIterator method)</a>
 </li>
+        <li><a href="puzzles.html#sudoku.Sudoku.__init__">(sudoku.Sudoku method)</a>
+</li>
+        <li><a href="puzzles.html#sudoku.SudokuBuilder.__init__">(sudoku.SudokuBuilder method)</a>
+</li>
         <li><a href="puzzles.html#sudoku.SudokuBuildError.__init__">(sudoku.SudokuBuildError method)</a>
 </li>
         <li><a href="puzzles.html#sudoku.SudokuCell.__init__">(sudoku.SudokuCell method)</a>
@@ -132,10 +136,6 @@
         <li><a href="puzzles.html#sudoku.SudokuCellFactory.__init__">(sudoku.SudokuCellFactory method)</a>
 </li>
         <li><a href="puzzles.html#sudoku.SudokuErrors.__init__">(sudoku.SudokuErrors method)</a>
-</li>
-        <li><a href="puzzles.html#sudoku.SudokuPuzzle.__init__">(sudoku.SudokuPuzzle method)</a>
-</li>
-        <li><a href="puzzles.html#sudoku.SudokuPuzzleBuilder.__init__">(sudoku.SudokuPuzzleBuilder method)</a>
 </li>
         <li><a href="puzzles.html#sudoku.SudokuSolver.__init__">(sudoku.SudokuSolver method)</a>
 </li>
@@ -154,7 +154,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.apply_to_all_contexts">apply_to_all_contexts() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.apply_to_all_contexts">apply_to_all_contexts() (sudoku.Sudoku method)</a>
 </li>
       <li><a href="puzzles.html#puzzle.Puzzle.as_list">as_list() (puzzle.Puzzle method)</a>
 </li>
@@ -164,12 +164,14 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#puzzle.CellContext.BOX">BOX (puzzle.CellContext attribute)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.backup_count">backup_count() (sudoku.Sudoku method)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuCell.box_iter">box_iter() (sudoku.SudokuCell method)</a>
+      <li><a href="puzzles.html#puzzle.CellContext.BOX">BOX (puzzle.CellContext attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="puzzles.html#sudoku.SudokuCell.box_iter">box_iter() (sudoku.SudokuCell method)</a>
+</li>
       <li><a href="puzzles.html#sudoku.BoxIterator">BoxIterator (class in sudoku)</a>
 </li>
       <li><a href="puzzles.html#puzzle.BuildError">BuildError</a>
@@ -190,17 +192,19 @@
 </li>
       <li><a href="puzzles.html#puzzle.CellIterator">CellIterator (class in puzzle)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.cells_per_value_dict">cells_per_value_dict() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.cells_per_value_dict">cells_per_value_dict() (sudoku.Sudoku method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="puzzles.html#puzzle.Cell.clear">clear() (puzzle.Cell method)</a>
 
       <ul>
         <li><a href="puzzles.html#puzzle.Puzzle.clear">(puzzle.Puzzle method)</a>
 </li>
       </ul></li>
-      <li><a href="puzzles.html#puzzle.LineType.COL">COL (puzzle.LineType attribute)</a>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="puzzles.html#puzzle.Cell.clear_if_unsolved">clear_if_unsolved() (puzzle.Cell method)</a>
+</li>
+      <li><a href="puzzles.html#puzzle.Puzzle.clear_unsolved_cells">clear_unsolved_cells() (puzzle.Puzzle method)</a>
 </li>
       <li><a href="puzzles.html#puzzle.CellContext.COLUMN">COLUMN (puzzle.CellContext attribute)</a>
 </li>
@@ -208,7 +212,7 @@
 </li>
       <li><a href="puzzles.html#puzzle.ColumnIterator">ColumnIterator (class in puzzle)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.combo_reduction">combo_reduction() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.combo_reduction">combo_reduction() (sudoku.Sudoku method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -232,7 +236,7 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.eligible_box_cells">eligible_box_cells() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.eligible_box_cells">eligible_box_cells() (sudoku.Sudoku method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -248,19 +252,25 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="puzzles.html#sudoku.PlaceStatus.FAILED">FAILED (sudoku.PlaceStatus attribute)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.fill">fill() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.fill">fill() (sudoku.Sudoku method)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.fill_empty_cells_with_options">fill_empty_cells_with_options() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.fill_empty_cells_with_options">fill_empty_cells_with_options() (sudoku.Sudoku method)</a>
+</li>
+      <li><a href="puzzles.html#sudoku.Sudoku.find_combination">find_combination() (sudoku.Sudoku method)</a>
+</li>
+      <li><a href="puzzles.html#sudoku.Sudoku.find_combination2">find_combination2() (sudoku.Sudoku method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.find_combination">find_combination() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.find_intersection_with_box">find_intersection_with_box() (sudoku.Sudoku method)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.find_combination2">find_combination2() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.find_shared_lines">find_shared_lines() (sudoku.Sudoku method)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.find_intersection_with_box">find_intersection_with_box() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.first_cell_in_box">first_cell_in_box() (sudoku.Sudoku method)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.find_shared_lines">find_shared_lines() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#puzzle.Puzzle.first_cell_in_column">first_cell_in_column() (puzzle.Puzzle method)</a>
+</li>
+      <li><a href="puzzles.html#puzzle.Puzzle.first_cell_in_row">first_cell_in_row() (puzzle.Puzzle method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -274,21 +284,15 @@
 </li>
       <li><a href="puzzles.html#puzzle.GenericPuzzleBuilder">GenericPuzzleBuilder (class in puzzle)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.get_box_dimension">get_box_dimension() (sudoku.SudokuPuzzle method)</a>
-</li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.get_context_iterator">get_context_iterator() (sudoku.SudokuPuzzle method)</a>
-</li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.get_first_cell_in_box">get_first_cell_in_box() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.get_box_dimension">get_box_dimension() (sudoku.Sudoku method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#puzzle.Puzzle.get_first_cell_in_column">get_first_cell_in_column() (puzzle.Puzzle method)</a>
-</li>
-      <li><a href="puzzles.html#puzzle.Puzzle.get_first_cell_in_row">get_first_cell_in_row() (puzzle.Puzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.get_context_iterator">get_context_iterator() (sudoku.Sudoku method)</a>
 </li>
       <li><a href="puzzles.html#sudoku.SudokuCell.get_next_cell_in_box">get_next_cell_in_box() (sudoku.SudokuCell method)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzleBuilder.get_puzzle">get_puzzle() (sudoku.SudokuPuzzleBuilder method)</a>
+      <li><a href="puzzles.html#sudoku.SudokuBuilder.get_puzzle">get_puzzle() (sudoku.SudokuBuilder method)</a>
 
       <ul>
         <li><a href="puzzles.html#sudoku.SudokuSolver.get_puzzle">(sudoku.SudokuSolver method)</a>
@@ -302,7 +306,7 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.intersecting_context_resolution">intersecting_context_resolution() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.intersecting_context_resolution">intersecting_context_resolution() (sudoku.Sudoku method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -327,10 +331,6 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#puzzle.LineType">LineType (class in puzzle)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="puzzles.html#puzzle.Puzzle.log_line">log_line() (puzzle.Puzzle method)</a>
 </li>
   </ul></td>
@@ -351,7 +351,7 @@
 </li>
         <li><a href="puzzles.html#module-sudoku">sudoku</a>
 </li>
-        <li><a href="puzzles.html#module-tests.test_puzzles">tests.test_puzzles</a>
+        <li><a href="puzzles.html#module-tests.tests">tests.tests</a>
 </li>
       </ul></li>
   </ul></td>
@@ -372,7 +372,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="puzzles.html#puzzle.CellContext.NONE">NONE (puzzle.CellContext attribute)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.normalize">normalize() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.normalize">normalize() (sudoku.Sudoku method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -382,7 +382,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="puzzles.html#sudoku.PlaceStatus.PASSED">PASSED (sudoku.PlaceStatus attribute)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.place_value">place_value() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.place_value">place_value() (sudoku.Sudoku method)</a>
 </li>
       <li><a href="puzzles.html#sudoku.PlaceStatus">PlaceStatus (class in sudoku)</a>
 </li>
@@ -400,7 +400,7 @@
       <li><a href="puzzles.html#puzzle.Puzzle.puzzle_log">puzzle_log() (puzzle.Puzzle method)</a>
 
       <ul>
-        <li><a href="puzzles.html#sudoku.SudokuPuzzle.puzzle_log">(sudoku.SudokuPuzzle method)</a>
+        <li><a href="puzzles.html#sudoku.Sudoku.puzzle_log">(sudoku.Sudoku method)</a>
 </li>
       </ul></li>
       <li><a href="puzzles.html#puzzle.PuzzleBuilder">PuzzleBuilder (class in puzzle)</a>
@@ -420,25 +420,21 @@
       <li><a href="puzzles.html#puzzle.Cell.remove_value_from_context">remove_value_from_context() (puzzle.Cell method)</a>
 
       <ul>
-        <li><a href="puzzles.html#sudoku.SudokuPuzzle.remove_value_from_context">(sudoku.SudokuPuzzle method)</a>
+        <li><a href="puzzles.html#sudoku.Sudoku.remove_value_from_context">(sudoku.Sudoku method)</a>
 </li>
       </ul></li>
       <li><a href="puzzles.html#sudoku.SudokuCell.remove_value_from_view">remove_value_from_view() (sudoku.SudokuCell method)</a>
 </li>
-      <li><a href="puzzles.html#puzzle.Cell.remove_values">remove_values() (puzzle.Cell method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.remove_values_from_context">remove_values_from_context() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#puzzle.Cell.remove_values">remove_values() (puzzle.Cell method)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.resolve_uniques_in_context">resolve_uniques_in_context() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.remove_values_from_context">remove_values_from_context() (sudoku.Sudoku method)</a>
+</li>
+      <li><a href="puzzles.html#sudoku.Sudoku.resolve_uniques_in_context">resolve_uniques_in_context() (sudoku.Sudoku method)</a>
 </li>
       <li><a href="puzzles.html#puzzle.CellContext.ROW">ROW (puzzle.CellContext attribute)</a>
-
-      <ul>
-        <li><a href="puzzles.html#puzzle.LineType.ROW">(puzzle.LineType attribute)</a>
 </li>
-      </ul></li>
       <li><a href="puzzles.html#puzzle.Cell.row_iter">row_iter() (puzzle.Cell method)</a>
 </li>
       <li><a href="puzzles.html#puzzle.RowIterator">RowIterator (class in puzzle)</a>
@@ -457,7 +453,7 @@
 </li>
       <li><a href="puzzles.html#sudoku.SudokuCell.set_next_cell_in_box">set_next_cell_in_box() (sudoku.SudokuCell method)</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuSolver.solve_puzzle">solve_puzzle() (sudoku.SudokuSolver method)</a>
+      <li><a href="puzzles.html#sudoku.SudokuSolver.solve">solve() (sudoku.SudokuSolver method)</a>
 </li>
       <li><a href="puzzles.html#puzzle.Cell.solved">solved() (puzzle.Cell method)</a>
 </li>
@@ -470,6 +466,10 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="puzzles.html#sudoku.Sudoku">Sudoku (class in sudoku)</a>
+</li>
+      <li><a href="puzzles.html#sudoku.SudokuBuilder">SudokuBuilder (class in sudoku)</a>
+</li>
       <li><a href="puzzles.html#sudoku.SudokuBuildError">SudokuBuildError</a>
 </li>
       <li><a href="puzzles.html#sudoku.SudokuCell">SudokuCell (class in sudoku)</a>
@@ -478,13 +478,9 @@
 </li>
       <li><a href="puzzles.html#sudoku.SudokuErrors">SudokuErrors</a>
 </li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle">SudokuPuzzle (class in sudoku)</a>
-</li>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzleBuilder">SudokuPuzzleBuilder (class in sudoku)</a>
-</li>
       <li><a href="puzzles.html#sudoku.SudokuSolver">SudokuSolver (class in sudoku)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest">SudokuTest (class in tests.test_puzzles)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest">SudokuTest (class in tests.tests)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -492,45 +488,49 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_alternate_placeholder">test_alternate_placeholder() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_alternate_placeholder">test_alternate_placeholder() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_build_exception_all_values_dimension_size_mismatch">test_build_exception_all_values_dimension_size_mismatch() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_build_exception_all_values_dimension_size_mismatch">test_build_exception_all_values_dimension_size_mismatch() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_build_exception_invalid_all_values_container">test_build_exception_invalid_all_values_container() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_build_exception_invalid_all_values_container">test_build_exception_invalid_all_values_container() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_build_exception_invalid_all_values_size">test_build_exception_invalid_all_values_size() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_build_exception_invalid_all_values_size">test_build_exception_invalid_all_values_size() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_build_exception_invalid_dimension">test_build_exception_invalid_dimension() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_build_exception_invalid_dimension">test_build_exception_invalid_dimension() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_build_exception_invalid_placeholder">test_build_exception_invalid_placeholder() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_build_exception_invalid_placeholder">test_build_exception_invalid_placeholder() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_cell_creation_bad_index">test_cell_creation_bad_index() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_cell_creation_bad_index">test_cell_creation_bad_index() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_cell_creation_no_indices">test_cell_creation_no_indices() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_cell_creation_no_indices">test_cell_creation_no_indices() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_cell_creation_val_too_large">test_cell_creation_val_too_large() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_cell_creation_val_too_large">test_cell_creation_val_too_large() (tests.tests.SudokuTest method)</a>
+</li>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_fill_empty_16x16_puzzle">test_fill_empty_16x16_puzzle() (tests.tests.SudokuTest method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_fill_empty_16x16_puzzle">test_fill_empty_16x16_puzzle() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_fill_empty_9x9_puzzle">test_fill_empty_9x9_puzzle() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_fill_empty_9x9_puzzle">test_fill_empty_9x9_puzzle() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_fill_partial">test_fill_partial() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_fill_partial">test_fill_partial() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_solve_challenging">test_solve_challenging() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_solve_challenging">test_solve_challenging() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_solve_difficult">test_solve_difficult() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_solve_difficult">test_solve_difficult() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_solve_easy">test_solve_easy() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_solve_easy">test_solve_easy() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_solve_empty">test_solve_empty() (tests.tests.SudokuTest method)</a>
 </li>
-      <li><a href="puzzles.html#tests.test_puzzles.SudokuTest.test_verify_difficult_solution">test_verify_difficult_solution() (tests.test_puzzles.SudokuTest method)</a>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_verify_challenging_solution">test_verify_challenging_solution() (tests.tests.SudokuTest method)</a>
+</li>
+      <li><a href="puzzles.html#tests.tests.SudokuTest.test_verify_difficult_solution">test_verify_difficult_solution() (tests.tests.SudokuTest method)</a>
 </li>
       <li>
-    tests.test_puzzles
+    tests.tests
 
       <ul>
-        <li><a href="puzzles.html#module-tests.test_puzzles">module</a>
+        <li><a href="puzzles.html#module-tests.tests">module</a>
 </li>
       </ul></li>
   </ul></td>
@@ -539,7 +539,7 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzle.unsolved_cell_count">unsolved_cell_count() (sudoku.SudokuPuzzle method)</a>
+      <li><a href="puzzles.html#sudoku.Sudoku.unsolved_cell_count">unsolved_cell_count() (sudoku.Sudoku method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -547,7 +547,7 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="puzzles.html#sudoku.SudokuPuzzleBuilder.validate_dimension">validate_dimension() (sudoku.SudokuPuzzleBuilder method)</a>
+      <li><a href="puzzles.html#sudoku.SudokuBuilder.validate_dimension">validate_dimension() (sudoku.SudokuBuilder method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>

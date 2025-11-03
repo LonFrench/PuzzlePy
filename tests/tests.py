@@ -2,7 +2,7 @@
 Unit tests for Sudoku related puzzle building and validation.
 """
 import unittest
-import test_data
+import ut_data
 from puzzle import *
 from sudoku import *
 
@@ -11,23 +11,23 @@ class SudokuTest(unittest.TestCase):
     # Tests for Sudoku parameter validation at initialization:
     def test_build_exception_invalid_dimension(self):
         with self.assertRaises(SudokuBuildError):   #using exception test within context 
-            SudokuPuzzleBuilder(dimension = 7)
+            SudokuBuilder(dimension = 7)
         
     def test_build_exception_all_values_dimension_size_mismatch(self):
         with self.assertRaises(SudokuBuildError):
-            SudokuPuzzleBuilder(dimension = 9, all_possible_values = ['1','2','3','4','5'])
+            SudokuBuilder(dimension = 9, all_possible_values = ['1','2','3','4','5'])
         
     def test_build_exception_invalid_all_values_size(self):
         with self.assertRaises(SudokuBuildError):
-            SudokuPuzzleBuilder(all_possible_values = ['1','2','3','4','5'])
+            SudokuBuilder(all_possible_values = ['1','2','3','4','5'])
         
     def test_build_exception_invalid_placeholder(self):
         with self.assertRaises(SudokuBuildError):
-            SudokuPuzzleBuilder(all_possible_values = ['1','2','3','4','5','6','7','8','9'], placeholder = '5')
+            SudokuBuilder(all_possible_values = ['1','2','3','4','5','6','7','8','9'], placeholder = '5')
         
     def test_build_exception_invalid_all_values_container(self):
         with self.assertRaises(SudokuBuildError):
-            SudokuPuzzleBuilder(starting_values = [['1','2','3'],['4','5','6'],['7','8','9']])
+            SudokuBuilder(starting_values = [['1','2','3'],['4','5','6'],['7','8','9']])
         
     def test_cell_creation_no_indices(self):
         with self.assertRaises(CellExcept):
@@ -44,82 +44,82 @@ class SudokuTest(unittest.TestCase):
     # Tests for Sudoku puzzle creation:
         #__init__(self, starting_values = None, dimension = 9, all_possible_values = DEFAULT_VALUE_OPTIONS, placeholder = DEFAULT_PLACEHOLDER)
     def test_fill_empty_9x9_puzzle(self):
-        builder = SudokuPuzzleBuilder()
+        builder = SudokuBuilder()
         sudoku_puzzle = builder.get_puzzle()
         sudoku_puzzle.fill()
         self.assertEqual(sudoku_puzzle.unsolved_cell_count(),0)
 
     def test_fill_empty_16x16_puzzle(self):
-        builder = SudokuPuzzleBuilder(dimension = 16, all_possible_values = ['1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g'], placeholder = ' ')
+        builder = SudokuBuilder(dimension = 16, all_possible_values = ['1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g'], placeholder = ' ')
         sudoku_puzzle = builder.get_puzzle()
         sudoku_puzzle.fill()
         self.assertEqual(sudoku_puzzle.unsolved_cell_count(),0)
 
     def test_alternate_placeholder(self):
-        builder = SudokuPuzzleBuilder(test_data.hard_puzzle_189x, placeholder = "x")
+        builder = SudokuBuilder(ut_data.hard_puzzle_189x, placeholder = "x")
         sudoku_puzzle = builder.get_puzzle()
         sudoku_solver = SudokuSolver(sudoku_puzzle)
-        sudoku_solver.solve_puzzle()
+        sudoku_solver.solve()
         solved_puzzle = sudoku_solver.get_puzzle()
         self.assertEqual(solved_puzzle.unsolved_cell_count(),0)
 
     # Tests for Sudoku puzzle solution:
     def test_solve_empty(self):
         with self.assertRaises(SudokuErrors):
-            builder = SudokuPuzzleBuilder(test_data.empty_9x9_puzzle, placeholder = " ")
+            builder = SudokuBuilder(ut_data.empty_9x9_puzzle, placeholder = " ")
             sudoku_puzzle = builder.get_puzzle()
             sudoku_solver = SudokuSolver(sudoku_puzzle)
-            sudoku_solver.solve_puzzle()
+            sudoku_solver.solve()
 
     def test_solve_easy(self):
-        builder = SudokuPuzzleBuilder(test_data.easy_puzzle_21, placeholder = " ")
+        builder = SudokuBuilder(ut_data.easy_puzzle_21, placeholder = " ")
         sudoku_puzzle = builder.get_puzzle()
         sudoku_solver = SudokuSolver(sudoku_puzzle)
-        sudoku_solver.solve_puzzle()
+        sudoku_solver.solve()
         solved_puzzle = sudoku_solver.get_puzzle()
         self.assertEqual(solved_puzzle.unsolved_cell_count(),0)
 
     def test_solve_difficult(self):
-        builder = SudokuPuzzleBuilder(test_data.hard_puzzle_189, placeholder = " ")
+        builder = SudokuBuilder(ut_data.hard_puzzle_189, placeholder = " ")
         sudoku_puzzle = builder.get_puzzle()
         sudoku_solver = SudokuSolver(sudoku_puzzle)
-        sudoku_solver.solve_puzzle()
+        sudoku_solver.solve()
         solved_puzzle = sudoku_solver.get_puzzle()
         self.assertEqual(solved_puzzle.unsolved_cell_count(),0)
 
     def test_solve_challenging(self):
-        builder = SudokuPuzzleBuilder(test_data.chal_puzzle_262, placeholder = " ")
+        builder = SudokuBuilder(ut_data.chal_puzzle_262, placeholder = " ")
         sudoku_puzzle = builder.get_puzzle()
         sudoku_solver = SudokuSolver(sudoku_puzzle)
-        sudoku_solver.solve_puzzle()
+        sudoku_solver.solve()
         solved_puzzle = sudoku_solver.get_puzzle()
         self.assertEqual(solved_puzzle.unsolved_cell_count(),0)
 
     def test_fill_partial(self):
-        builder = SudokuPuzzleBuilder(test_data.chal_puzzle_262, placeholder = " ")
+        builder = SudokuBuilder(ut_data.chal_puzzle_262, placeholder = " ")
         sudoku_puzzle = builder.get_puzzle()
         sudoku_puzzle.fill()
         self.assertEqual(sudoku_puzzle.unsolved_cell_count(),0)
 
     def test_verify_difficult_solution(self):
-        builder = SudokuPuzzleBuilder(test_data.hard_puzzle_189, placeholder = ' ')
+        builder = SudokuBuilder(ut_data.hard_puzzle_189, placeholder = ' ')
         puzzle = builder.get_puzzle()
         solver = SudokuSolver(puzzle)
-        solver.solve_puzzle()
+        solver.solve()
         solved_puzzle = solver.get_puzzle()
 
-        builder = SudokuPuzzleBuilder(test_data.hard_puzzle_189_solved, placeholder = ' ')
+        builder = SudokuBuilder(ut_data.hard_puzzle_189_solved, placeholder = ' ')
         solution = builder.get_puzzle()
         self.assertEqual(solved_puzzle, solution)
 
     def test_verify_challenging_solution(self):
-        builder = SudokuPuzzleBuilder(test_data.chal_puzzle_262, placeholder = ' ')
+        builder = SudokuBuilder(ut_data.chal_puzzle_262, placeholder = ' ')
         puzzle = builder.get_puzzle()
         solver = SudokuSolver(puzzle)
-        solver.solve_puzzle()
+        solver.solve()
         solved_puzzle = solver.get_puzzle()
 
-        builder = SudokuPuzzleBuilder(test_data.chal_puzzle_262_solved, placeholder = ' ')
+        builder = SudokuBuilder(ut_data.chal_puzzle_262_solved, placeholder = ' ')
         solution = builder.get_puzzle()
         self.assertEqual(solved_puzzle, solution)
 

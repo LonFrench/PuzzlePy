@@ -15,7 +15,7 @@ import zlib
 from importlib import import_module
 from puzzles import *
 from puzzles.sudoku import *
-from tests import test_data
+from tests import ut_data
 
 # Globals
 test_mode = True
@@ -384,7 +384,7 @@ class Sudoku_old:
         
 
             # run through "solver"
-            solved_puzzle, successful = Sudoku.solve_puzzle(Sudoku.matrix_by_rows)
+            solved_puzzle, successful = Sudoku.solve(Sudoku.matrix_by_rows)
             log(logger.info, f"Attempt {attempt} at solving puzzle {"was" if successful else "was not"} successfull.")   #ternary
             # Sudoku.matrix_by_rows = copy.deepcopy(solved_puzzle)
 
@@ -397,7 +397,7 @@ class Sudoku_old:
     # Determine if puzzle has unique solution
     # returns False if puzzle wasn't solved, True otherwise
     @staticmethod
-    def solve_puzzle(puzzle_by_rows):
+    def solve(puzzle_by_rows):
 
         main_puzzle_updating = True
         while main_puzzle_updating:
@@ -609,7 +609,7 @@ def place_char(grid_row, grid_col, unavailable_rows, unavailable_cols, char):
     # Make all cells that lie on unavailable lines (rows and columns) unavailable
     # If this results in an empty available cell list for box we've got to back track
     masked_local_box_copy = copy.deepcopy(Sudoku.matrix[grid_row][grid_col])
-    get_step_size = lambda col : 1 if col > 0 else 3     # using lambda
+    step_size = lambda col : 1 if col > 0 else 3     # using lambda
 
     try:
         for row_expanded in unavailable_rows:
@@ -623,8 +623,7 @@ def place_char(grid_row, grid_col, unavailable_rows, unavailable_cols, char):
                 masked_local_box_copy.mask_line(LineType.COL, col)
     
     except CellExcept as ex:
-        # back_track_steps = Sudoku.get_backtrack_steps(grid_col)  # going back far enough to redo box above this one and forward
-        back_track_steps = get_step_size(grid_col)  # going back far enough to redo box above this one and forward
+        back_track_steps = step_size(grid_col)  # going back far enough to redo box above this one and forward
         log(logger.warning, f"After masking no empty cells were found; going back {back_track_steps} step(s).")
         return Status.FAILED, back_track_steps
 
@@ -637,8 +636,7 @@ def place_char(grid_row, grid_col, unavailable_rows, unavailable_cols, char):
         try:
             found_row, found_col = masked_local_box_copy.randomly_place_char(char)
         except CellExcept as ex:
-            # back_track_steps = Sudoku.get_backtrack_steps(grid_col)  # going back far enough to redo box above this one and forward
-            back_track_steps = get_step_size(grid_col)  # going back far enough to redo box above this one and forward
+            back_track_steps = step_size(grid_col)  # going back far enough to redo box above this one and forward
             log(logger.warning, f"Failed to find empty cell for {char} in box [{grid_row}][{grid_col}], going back {back_track_steps} steps and retrying.")
             return Status.FAILED, back_track_steps
 
@@ -733,11 +731,11 @@ def main():
                     
             #         placeholder = input("Placeholder (defaults to space): ")
 
-            #         builder = SudokuPuzzleBuilder(pzl, placeholder)   # chal_puzzle_262   hard_puzzle_189 hard_puzzle_189x   easy_puzzle_21  puzzle_16x16_xx
+            #         builder = SudokuBuilder(pzl, placeholder)   # chal_puzzle_262   hard_puzzle_189 hard_puzzle_189x   easy_puzzle_21  puzzle_16x16_xx
             #         sudoku_puzzle = builder.get_puzzle()
             #         log(logger.info, sudoku_puzzle.puzzle_log())
             #         sudoku_solver = SudokuSolver(sudoku_puzzle)
-            #         sudoku_solver.solve_puzzle()
+            #         sudoku_solver.solve()
             #         solved_puzzle = sudoku_solver.get_puzzle()
             #         num_unsolved = solved_puzzle.unsolved_cell_count()
             #         log(logger.info, f"Number unsolved cells = {num_unsolved}")
@@ -759,11 +757,11 @@ def main():
 # TODO: after building prompts for below tests remove
             # testing medium sudoku solution
             if command == '1':
-                builder = SudokuPuzzleBuilder(test_data.hard_puzzle_189, placeholder = ' ')   # chal_puzzle_262   hard_puzzle_189 hard_puzzle_189x   easy_puzzle_21  puzzle_16x16_xx
+                builder = SudokuBuilder(ut_data.hard_puzzle_189, placeholder = ' ')   # chal_puzzle_262   hard_puzzle_189 hard_puzzle_189x   easy_puzzle_21  puzzle_16x16_xx
                 sudoku_puzzle = builder.get_puzzle()
                 log(logger.info, sudoku_puzzle.puzzle_log())
                 sudoku_solver = SudokuSolver(sudoku_puzzle)
-                sudoku_solver.solve_puzzle()
+                sudoku_solver.solve()
                 solved_puzzle = sudoku_solver.get_puzzle()
                 num_unsolved = solved_puzzle.unsolved_cell_count()
                 log(logger.info, f"Number unsolved cells = {num_unsolved}")
@@ -774,8 +772,8 @@ def main():
 
             #test puzzle creation
             elif command == '2':
-                # builder = SudokuPuzzleBuilder(all_possible_values = ['1', '2', '3', '4', '5', '6', '7', '8', '9'], placeholder = ' ')   # chal_puzzle_262   hard_puzzle_189   easy_puzzle_21  puzzle_16x16_xx
-                builder = SudokuPuzzleBuilder()
+                # builder = SudokuBuilder(all_possible_values = ['1', '2', '3', '4', '5', '6', '7', '8', '9'], placeholder = ' ')   # chal_puzzle_262   hard_puzzle_189   easy_puzzle_21  puzzle_16x16_xx
+                builder = SudokuBuilder()
                 sudoku_puzzle = builder.get_puzzle()
 
                 if sudoku_puzzle.fill() == Status.FAILED:
@@ -786,7 +784,7 @@ def main():
             #test puzzle creation using partially filled puzzle
             elif command == '3':
                 try:
-                    builder = SudokuPuzzleBuilder(test_data.chal_puzzle_262)
+                    builder = SudokuBuilder(ut_data.chal_puzzle_262)
                     sudoku_puzzle = builder.get_puzzle()
                     log(logger.info, sudoku_puzzle.puzzle_log())
 
@@ -800,7 +798,7 @@ def main():
 
             elif command == '4':
                 #sys.setrecursionlimit(2000)
-                builder = SudokuPuzzleBuilder(dimension = 16, all_possible_values = ['1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g'], placeholder = ' ')
+                builder = SudokuBuilder(dimension = 16, all_possible_values = ['1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g'], placeholder = ' ')
                 sudoku_puzzle = builder.get_puzzle()
                 if sudoku_puzzle.fill() == Status.FAILED:
                     log(logger.info, "Failed to generate puzzle.")
@@ -809,7 +807,7 @@ def main():
 
             elif command == '5':
                 try:
-                    builder = SudokuPuzzleBuilder(test_data.puzzle_16x16)
+                    builder = SudokuBuilder(ut_data.puzzle_16x16)
                     sudoku_puzzle = builder.get_puzzle()
                     log(logger.info, sudoku_puzzle.puzzle_log())
 
@@ -818,13 +816,13 @@ def main():
 
 
             elif command == '6':
-                builder = SudokuPuzzleBuilder(test_data.hard_puzzle, placeholder = ' ')
+                builder = SudokuBuilder(ut_data.hard_puzzle, placeholder = ' ')
                 puzzle = builder.get_puzzle()
                 solver = SudokuSolver(puzzle)
-                solver.solve_puzzle()
+                solver.solve()
                 solved_puzzle = solver.get_puzzle()
 
-                builder = SudokuPuzzleBuilder(test_data.hard_puzzle_solved, placeholder = ' ')
+                builder = SudokuBuilder(ut_data.hard_puzzle_solved, placeholder = ' ')
                 solution = builder.get_puzzle()
                 if solved_puzzle == solution:
                     pass
@@ -833,7 +831,7 @@ def main():
                 # self.assertEqual(solved_puzzle, solution)
 
             elif command == '7':
-                builder = SudokuPuzzleBuilder()
+                builder = SudokuBuilder()
                 sudoku_puzzle = builder.get_puzzle()
                 sudoku_puzzle.fill()
                 log(logger.info, sudoku_puzzle.puzzle_log())

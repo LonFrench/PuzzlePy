@@ -45,9 +45,9 @@ class CellExcept(Exception):
 
 class Cell(ABC):
     """
-    This class represents the smallest element in a puzzle.
+    This represents the smallest element in a puzzle.
     Cells are circularly linked to neighbors by row and column, each 
-    referred to as a "context". Subclasses may define their own cell contexts.
+    referred to as a "context". Subclasses may extend with their own cell contexts.
     
     """
 
@@ -68,7 +68,7 @@ class Cell(ABC):
         :param placeholder: Value for empty Cell (defaults to single space)
         :type placeholder: char
         """
-# TODO: determine if "contents" should be set by subclass if given; how it's being set for SudokuPuzzle is fuzzy when looking at the code: 
+# TODO: determine if "contents" should be set by subclass if given; how it's being set for Sudoku is fuzzy when looking at the code: 
 # default to string unless something different is passed as parameter. The base cell class should be as type agnostic as possible for "contents"
 
         self._placeholder = placeholder
@@ -114,10 +114,10 @@ class Cell(ABC):
     def _set_next_cell_in_column(self, next_cell):
         self.next_cell_in_column = next_cell
    
-    def _get_next_cell_in_row(self):
+    def _next_cell_in_row(self):
         return self.next_cell_in_row
 
-    def _get_next_cell_in_column(self):
+    def _next_cell_in_column(self):
         return self.next_cell_in_column
 
     def set(self, raw_value) -> bool:
@@ -301,8 +301,8 @@ class CellFactory(ABC):
     @abstractmethod
     def new_cell(self, value = None, row_index = 0, column_index = 0, placeholder = DEFAULT_PLACEHOLDER) -> Cell:
         """
-        This method will be used by corresponding "builder" classes to 
-        create Cells for the type of puzzle being constructed.
+        Used by corresponding "builder" classes to 
+        create Cells for the type of puzzle under construction.
         
         :param value: Cell's value; if not placeholder Cell will be 
             marked as immutable
@@ -364,7 +364,7 @@ class RowIterator(CellIterator):
             raise StopIteration
 
         cell = self.next_cell
-        self.next_cell = self.next_cell._get_next_cell_in_row()
+        self.next_cell = self.next_cell._next_cell_in_row()
 
         # The original cell was the first one returned. If we're back to it 
         # we've finished the circularly liked cell row list.
@@ -387,7 +387,7 @@ class ColumnIterator(CellIterator):
             raise StopIteration
 
         cell = self.next_cell
-        self.next_cell = self.next_cell._get_next_cell_in_column()
+        self.next_cell = self.next_cell._next_cell_in_column()
 
         # The original cell was the first one returned. If we're back to it 
         # we've finished the circularly liked cell column list.
@@ -515,7 +515,7 @@ class Puzzle:
         else:
             return None
 
-    def get_first_cell_in_row(self, row_number) -> Cell:
+    def first_cell_in_row(self, row_number) -> Cell:
         """
         Returns first cell in row.
 
@@ -528,7 +528,7 @@ class Puzzle:
             raise PuzzleExcept(f"Row number ({row_number}) must be between 1 and the puzzle dimension {self.dimension}, inclusive.")
         return self.matrix[row_number - 1][0]
     
-    def get_first_cell_in_column(self, column_number) -> Cell:
+    def first_cell_in_column(self, column_number) -> Cell:
         """
         Returns first cell in column.
 
@@ -567,10 +567,10 @@ class Puzzle:
             log_str += f"\n\t\t\t{line_label} {line.ljust(2," ")}:"
 
             if context is CellContext.ROW:
-                first_cell = self.get_first_cell_in_row(line)            
+                first_cell = self.first_cell_in_row(line)            
                 cell_iter = first_cell.row_iter()
             else:
-                first_cell = self.get_first_cell_in_column(line)            
+                first_cell = self.first_cell_in_column(line)            
                 cell_iter = first_cell.column_iter()
 
             for cell in cell_iter:
@@ -656,7 +656,7 @@ class GenericPuzzleBuilder(PuzzleBuilder):
     def __init__(self, values = None, rows = 9, columns = 9):
         try:
             # create cells to hold all initial puzzle values (or space if no data provided)
-#TODO: passing # rows/columns to SudokuPuzzle AND to the parent builder class seems redundant. 
+#TODO: passing # rows/columns to Sudoku AND to the parent builder class seems redundant. 
 # Maybe have the parent builder class derive dimensions from passed in puzzle? Change for all occurences.
             puzzle = Puzzle(rows, columns)
             cell_factory = GenericCellFactory()

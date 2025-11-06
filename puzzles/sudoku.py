@@ -184,7 +184,7 @@ class Sudoku(Puzzle):
         """
         try:
             # Generate a randomly sorted list of values to place
-            rand_vals = self.all_value_options
+            rand_vals = list(self.all_value_options)
             random.shuffle(rand_vals)
 
             for attempt in range(1, 1000):   # 8 is plenty when starting from scratch
@@ -206,7 +206,8 @@ class Sudoku(Puzzle):
 
             return status
         except Exception as ex:
-            raise PuzzleExcept(f"Sudoku.place_value() {ex}.")
+            raise PuzzleExcept(f"Sudoku.place_value() .")
+            # raise PuzzleExcept(f"Sudoku.place_value() {ex}.")
 
 
     def backup_count(self, box_num):
@@ -668,7 +669,6 @@ class Sudoku(Puzzle):
                                     log(logger.debug, f"find_combination({iter}) \t\tPersisting returned combo value set {ret_value_set} and cell set {[str(c) for c in ret_cell_set]}")
                                     found_value_set = ret_value_set
                                     found_cell_set = ret_cell_set
-
                         else:
                             log(logger.debug, f"find_combination({iter}) \t\t{value} already in value set {value_set}")
 
@@ -851,7 +851,7 @@ class SudokuBuilder(PuzzleBuilder):
         :raises: SudokuBuildError if invalid parameter enountered
         """
         try:
-#TODO: validate that incoming values are consistent w/ Sudoku rules, i.e., vals not duplicated in any context?
+#TODO: ensure incoming values are consistent w/ Sudoku rules, i.e., vals not duplicated in any context?
 
             # Validate passed-in puzzle
             if starting_values != None:
@@ -896,11 +896,12 @@ class SudokuBuilder(PuzzleBuilder):
                     raise SudokuBuildError(f"Number of possible values ({len(all_possible_values)}) must match dimension ({dimension}) of Sudoku puzzle.")
 
             # Create cells to hold all initial puzzle values (or placeholder if no data provided)
-            puzzle = Sudoku(all_possible_values, dimension)
+            # TODO: clean up     self.puzzle = Sudoku(all_possible_values, dimension)
 
             cell_factory = SudokuCellFactory()
 
-            super().__init__(puzzle, cell_factory, dimension, dimension, starting_values, all_possible_values, placeholder)   # does basic row/column set up and row and column linked lists
+            # create puzzle and perform basic row/column set up and row and column linked lists
+            super().__init__(Sudoku(all_possible_values, dimension), cell_factory, dimension, dimension, starting_values, all_possible_values, placeholder)
 
             # Base class builder linked cells by row and column. Since Sudoku 
             # has boxes, circular linked box lists need to be created.
@@ -908,18 +909,18 @@ class SudokuBuilder(PuzzleBuilder):
             # The initial pass was done above (linking all cells by row)
             for row_index in range(dimension):
                 for column_index in range(dimension - 1):
-                    puzzle[row_index, column_index].set_next_cell_in_box(puzzle[row_index, column_index + 1])
+                    self.puzzle[row_index, column_index].set_next_cell_in_box(self.puzzle[row_index, column_index + 1])
 
             # Now to replace the "row" link for cells at the right side of their cell to the 1st box cell in the line below
             # Loop should execute 24 (3 x 8 since the last row isn't done) times
-            box_dimension = puzzle.get_box_dimension()
+            box_dimension = self.puzzle.get_box_dimension()
             box_offset = box_dimension - 1    
 
             for row_index in range(dimension - 1):
                 for column_index in range(box_offset, dimension, box_dimension):
                     next_cell_row = row_index + 1
                     next_cell_column = column_index - box_offset
-                    puzzle[row_index, column_index].set_next_cell_in_box( puzzle[ next_cell_row, next_cell_column ] )
+                    self.puzzle[row_index, column_index].set_next_cell_in_box( self.puzzle[ next_cell_row, next_cell_column ] )
                     
             # Next, link last cell in box (bottom left) to 1st cell in box (upper right)
             # Loop should execute dimension times
@@ -928,15 +929,13 @@ class SudokuBuilder(PuzzleBuilder):
                     next_cell_row = row_index - box_offset
                     next_cell_column = column_index - box_offset
 
-                    puzzle[row_index, column_index].set_next_cell_in_box( puzzle[ next_cell_row, next_cell_column ] )
+                    self.puzzle[row_index, column_index].set_next_cell_in_box( self.puzzle[ next_cell_row, next_cell_column ] )
 
             # Set each cell's box number
             for row_index in range(dimension):
                 for column_index in range(dimension):
                     box_number = box_dimension * int((row_index)//box_dimension) + int((column_index)//box_dimension) + 1
-                    puzzle[row_index, column_index].set_box_number(box_number)
-
-            self.puzzle = puzzle
+                    self.puzzle[row_index, column_index].set_box_number(box_number)
  
         except Exception as ex:
             raise SudokuBuildError(f"SudokuBuilder(): {ex}")
@@ -969,7 +968,6 @@ class SudokuBuilder(PuzzleBuilder):
         """
 #TODO: determine impact of returning deep copy here; is it even necessary?
         return self.puzzle
-
 
 
 #TODO:  need to add "add" method or something to track size (set self.dimension), or maybe "finished_building" method for this!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

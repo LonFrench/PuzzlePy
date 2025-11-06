@@ -15,15 +15,15 @@ class SudokuTest(unittest.TestCase):
         
     def test_build_exception_all_values_dimension_size_mismatch(self):
         with self.assertRaises(SudokuBuildError):
-            SudokuBuilder(dimension = 9, all_possible_values = ['1','2','3','4','5'])
+            SudokuBuilder(dimension = 9, all_possible_values = ('1','2','3','4','5'))
         
     def test_build_exception_invalid_all_values_size(self):
         with self.assertRaises(SudokuBuildError):
-            SudokuBuilder(all_possible_values = ['1','2','3','4','5'])
+            SudokuBuilder(all_possible_values = ('1','2','3','4','5'))
         
     def test_build_exception_invalid_placeholder(self):
         with self.assertRaises(SudokuBuildError):
-            SudokuBuilder(all_possible_values = ['1','2','3','4','5','6','7','8','9'], placeholder = '5')
+            SudokuBuilder(all_possible_values = ('1','2','3','4','5','6','7','8','9'), placeholder = '5')
         
     def test_build_exception_invalid_all_values_container(self):
         with self.assertRaises(SudokuBuildError):
@@ -42,7 +42,6 @@ class SudokuTest(unittest.TestCase):
             cell = SudokuCell('12', placeholder = "x")
 
     # Tests for Sudoku puzzle creation:
-        #__init__(self, starting_values = None, dimension = 9, all_possible_values = DEFAULT_VALUE_OPTIONS, placeholder = DEFAULT_PLACEHOLDER)
     def test_fill_empty_9x9_puzzle(self):
         builder = SudokuBuilder()
         sudoku_puzzle = builder.get_puzzle()
@@ -50,7 +49,7 @@ class SudokuTest(unittest.TestCase):
         self.assertEqual(sudoku_puzzle.unsolved_cell_count(),0)
 
     def test_fill_empty_16x16_puzzle(self):
-        builder = SudokuBuilder(dimension = 16, all_possible_values = ['1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g'], placeholder = ' ')
+        builder = SudokuBuilder(dimension = 16, all_possible_values = ('1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g'), placeholder = ' ')
         sudoku_puzzle = builder.get_puzzle()
         sudoku_puzzle.fill()
         self.assertEqual(sudoku_puzzle.unsolved_cell_count(),0)

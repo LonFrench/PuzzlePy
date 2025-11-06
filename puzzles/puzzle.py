@@ -1,21 +1,26 @@
 """
 This module contains abstract base classes, enumerations, and constants
 for implementing various types of 2-D puzzles.
-""" 
+"""
 from abc import ABC, abstractmethod
 import copy
-from enum import Enum, auto, unique
+from enum import Enum, auto
 import random
 
-__all__ = ['Puzzle','PuzzleBuilder','PuzzleExcept','BuildError','GenericPuzzleBuilder','CellIterator','ColumnIterator','RowIterator','Cell','GenericCell','CellContext','CellExcept','CellFactory','GenericCellFactory','DEFAULT_PLACEHOLDER','DEFAULT_VALUE_OPTIONS']
+__all__ = ['Puzzle','PuzzleBuilder','PuzzleExcept','BuildError','GenericPuzzleBuilder',
+            'CellIterator','ColumnIterator','RowIterator','Cell','GenericCell','CellContext',
+            'CellExcept','CellFactory','GenericCellFactory','DEFAULT_PLACEHOLDER',
+            'DEFAULT_VALUE_OPTIONS']
 
 # TODO: identify internal only variables/methods and add underscore ('_')to front of name
 
 DEFAULT_PLACEHOLDER = ' '
 """Value of an empty cell (placeholder) if not specified."""
-DEFAULT_VALUE_OPTIONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+DEFAULT_VALUE_OPTIONS = ('1', '2', '3', '4', '5', '6', '7', '8', '9')
 """Puzzle values list to use if one is not provided."""
-tab_size = 5
+
+TAB_SIZE = 5
 
 class CellContext(Enum):
     """
@@ -23,7 +28,7 @@ class CellContext(Enum):
     """
     ROW = auto()
     COLUMN = auto()
-    BOX = auto()    
+    BOX = auto()
     DIAGONAL_MAIN = auto()   # running from left down to right
     DIAGONAL_MINOR = auto()   # running from right down to left
     NONE = auto()
@@ -52,7 +57,8 @@ class Cell(ABC):
     """
 
     @abstractmethod       # using abstract class
-    def __init__(self, raw_value = None, row_index = -1, column_index = -1, placeholder = DEFAULT_PLACEHOLDER):
+    def __init__(self, raw_value = None, row_index = -1, column_index = -1,
+                 placeholder = DEFAULT_PLACEHOLDER):
         """
         Base ctor
 
@@ -68,25 +74,31 @@ class Cell(ABC):
         :param placeholder: Value for empty Cell (defaults to single space)
         :type placeholder: char
         """
-# TODO: determine if "contents" should be set by subclass if given; how it's being set for Sudoku is fuzzy when looking at the code: 
-# default to string unless something different is passed as parameter. The base cell class should be as type agnostic as possible for "contents"
+# TODO: determine if "contents" should be set by subclass if given; how it's
+# being set for Sudoku is fuzzy when looking at the code:
+# default to string unless something different is passed as parameter.
+# The base cell class should be as type agnostic as possible for "contents"
 
         self._placeholder = placeholder
-
         if row_index < 0 or column_index < 0:
-            raise CellExcept(f"Valid cell indices must be provided.")
-        
+            raise CellExcept("Valid cell indices must be provided.")
+
         # If initial, non-placeholder value given then set cell immutable
         self.immutable = False
-        if raw_value == None or raw_value == placeholder:
-            self.set(self._placeholder)
+
+        if raw_value in (None, placeholder):   # Using merged test
+            self.contents = set(placeholder)
         else:
-            self.set(raw_value)
+            self.contents = set(raw_value)
             self.immutable = True
 
         # Make line numbers 1 relative
         self.row_number = row_index + 1
         self.column_number = column_index + 1
+
+        # Set by puzzle builder
+        self.next_cell_in_row = None
+        self.next_cell_in_column = None
 
     def __str__(self):
         sorted_contents = sorted(self.contents)
@@ -96,28 +108,32 @@ class Cell(ABC):
     def __len__(self):
         if self.contents == {self._placeholder}:
             return 0
-        else:
-            return len(self.contents)
+
+        return len(self.contents)
 
     def __contains__(self, value):
         return value in self.contents
-        
+
     def __iter__(self):
         return iter(self.contents)
 
     def _set_immutable(self, state):
         self.immutable = state
- 
-    def _set_next_cell_in_row(self, next_cell):
+
+    def set_next_cell_in_row(self, next_cell):
+        """Set reference to next cell in row."""
         self.next_cell_in_row = next_cell
 
-    def _set_next_cell_in_column(self, next_cell):
+    def set_next_cell_in_column(self, next_cell):
+        """Set reference to next cell in column."""
         self.next_cell_in_column = next_cell
-   
-    def _next_cell_in_row(self):
+
+    def get_next_cell_in_row(self):
+        """Returns reference to next cell in row."""
         return self.next_cell_in_row
 
-    def _next_cell_in_column(self):
+    def get_next_cell_in_column(self):
+        """Returns reference to next cell in column."""
         return self.next_cell_in_column
 
     def set(self, raw_value) -> bool:
@@ -132,10 +148,10 @@ class Cell(ABC):
         if not self.immutable:
             self.contents = set(raw_value)
             return True
-        else:
-            return False
 
-    def row_iter(self) -> "RowIterator":      # using double quotes since a forward reference 
+        return False
+
+    def row_iter(self) -> "RowIterator":      # using double quotes since a forward reference
         """
         Returns iterator for cell's row.
 
@@ -144,7 +160,7 @@ class Cell(ABC):
         """
         return RowIterator(self)
 
-    def column_iter(self) -> "ColumnIterator": 
+    def column_iter(self) -> "ColumnIterator":
         """
         Returns iterator for cell's column.
 
@@ -188,7 +204,7 @@ class Cell(ABC):
         :return: True if value found in another Cell in context; otherwise
             False.
         :rtype: bool
-        """    
+        """
         found = False
         for srch_cell in context_iter:
             if value in srch_cell:            # using set membership test
@@ -288,8 +304,8 @@ class GenericCell(Cell):
     """
     Basic Cell that can be instantiated for testing.
     """
-    def __init__(self, s_value):
-        super().__init__(value = s_value)
+    def __init__(self, value, row_index = -1, column_index = -1, placeholder = DEFAULT_PLACEHOLDER):
+        super().__init__(value, row_index, column_index, placeholder)
 
 
 class CellFactory(ABC):
@@ -299,7 +315,8 @@ class CellFactory(ABC):
     puzzles of the desired type.
     """
     @abstractmethod
-    def new_cell(self, value = None, row_index = 0, column_index = 0, placeholder = DEFAULT_PLACEHOLDER) -> Cell:
+    def new_cell(self, value = None, row_index = 0, column_index = 0,
+                 placeholder = DEFAULT_PLACEHOLDER) -> Cell:
         """
         Used by corresponding "builder" classes to 
         create Cells for the type of puzzle under construction.
@@ -318,7 +335,6 @@ class CellFactory(ABC):
         :return: Cell object 
         :rtype: Object of class derived from Class 
         """
-        pass
 
 class GenericCellFactory(CellFactory):
     """
@@ -327,8 +343,9 @@ class GenericCellFactory(CellFactory):
     def __init__(self):
         self.type = "Generic"
 
-    def new_cell(self, value, row = -1, column = -1, immutable = False):
-        return GenericCell(value, row, column, immutable)
+    def new_cell(self, value = None, row_index = 0, column_index = 0,
+                 placeholder = DEFAULT_PLACEHOLDER):
+        return GenericCell(value, row_index, column_index, placeholder)
 
 class CellIterator(ABC):
     """
@@ -346,11 +363,11 @@ class CellIterator(ABC):
 
     def __iter__(self):
         return self
-    
+
     def __next__(self):
         pass
 
-class RowIterator(CellIterator):       
+class RowIterator(CellIterator):
     """
     Iterator for traversing a cell's row; starts at current cell and, 
     since cells are circularly linked, breaks out of loop before 
@@ -364,13 +381,13 @@ class RowIterator(CellIterator):
             raise StopIteration
 
         cell = self.next_cell
-        self.next_cell = self.next_cell._next_cell_in_row()
+        self.next_cell = self.next_cell.get_next_cell_in_row()
 
-        # The original cell was the first one returned. If we're back to it 
+        # The original cell was the first one returned. If we're back to it
         # we've finished the circularly liked cell row list.
         if self.next_cell == self.first_cell:
             self.stop = True
- 
+
         return cell
 
 class ColumnIterator(CellIterator):
@@ -387,18 +404,20 @@ class ColumnIterator(CellIterator):
             raise StopIteration
 
         cell = self.next_cell
-        self.next_cell = self.next_cell._next_cell_in_column()
+        self.next_cell = self.next_cell.get_next_cell_in_column()
 
-        # The original cell was the first one returned. If we're back to it 
+        # The original cell was the first one returned. If we're back to it
         # we've finished the circularly liked cell column list.
         if self.next_cell is self.first_cell:
             self.stop = True
- 
+
         return cell
 
 
 class Puzzle:
-
+    """
+    Base class for all puzzle types providing basic row and column validation and access.
+    """
     def __init__(self, row_dimension, column_dimension):
         if row_dimension < 1:
             raise PuzzleExcept(f"Row dimension ({row_dimension}) must be positive integer.")
@@ -409,13 +428,14 @@ class Puzzle:
         self.column_dimension = column_dimension
         self.matrix = []
         self.length = row_dimension * column_dimension
-        
+        self.empties = []
 
     # Returns the puzzle as a single string where all the cell values have been concatenated
     # starting with the upper left and moving left to right and down till the bottom right cell
 #TODO: fix this
     # def __str__(self):
-    #     val = [str(self.matrix[row][col]) for row in range(self.row_dimension) for col in range(self.column_dimension)]   #using list comprehension
+    #     val = [str(self.matrix[row][col]) for row in range(self.row_dimension) for ...
+    #                                            ...     col in range(self.column_dimension)]
     #     pass
 
 
@@ -450,7 +470,7 @@ class Puzzle:
             for col in range(self.column_dimension):
                 if str(self.matrix[row][col]) != str(other.matrix[row][col]):
                     return False
-                
+
         return True
 
 
@@ -458,8 +478,9 @@ class Puzzle:
         """
         Returns puzzle as list of cells' contents.
         """
-        val = [self.matrix[row][col] for row in range(self.row_dimension) for col in range(self.column_dimension)]   #using list comprehension
-        pass
+        #using list comprehension
+        val_list = [self.matrix[row][col] for row in range(self.row_dimension) for col in range(self.column_dimension)]  # pylint: disable=C0301
+        return val_list
 
     def clear(self):
         """
@@ -476,44 +497,45 @@ class Puzzle:
         for row in self.matrix:
             for cell in row:
                 cell.clear_if_unsolved()
- 
+
     def empty_count(self):
         """ 
         Returns the number of empty Cells, i.e., those that only contain
         the placeholder.
         """
         self._build_empty_cell_list()
-        return len(self.empties)   
+        return len(self.empties)
 
     def add_row(self, row):
+        """Appends passed-in row to puzzle."""
         self.matrix.append(row)
 
     def max_contents_size(self):
         """
         Returns the highest number of elements found in any Cell.
         """
-        max = 0
+        max_size = 0
         for row in self.matrix:
             for cell in row:
                 size = len(cell.contents)
-                if size > max:
-                    max = size
-        return max
+                max_size = max(max_size, size)
+
+        return max_size
 
     def _build_empty_cell_list(self):
-        self.empties = []
         for row in self.matrix:
             for cell in row:
                 if cell.empty():
-                    self.empties.append(cell) 
+                    self.empties.append(cell)
 
 
-    def get_random_empty(self):
-        self._build_empty_cell_list()        
+    def random_empty(self):
+        """Returns a random empty cell."""
+        self._build_empty_cell_list()
         if len(self.empties) != 0:
             return random.sample(self.empties, len(self.empties))     #using random sample
-        else:
-            return None
+
+        return None
 
     def first_cell_in_row(self, row_number) -> Cell:
         """
@@ -524,10 +546,13 @@ class Puzzle:
         :return: First cell in given row
         :rtype: Cell
         """
-        if row_number < 1 and row_number > self.dimension:
-            raise PuzzleExcept(f"Row number ({row_number}) must be between 1 and the puzzle dimension {self.dimension}, inclusive.")
-        return self.matrix[row_number - 1][0]
-    
+        if 1 <= row_number <= self.row_dimension:
+            return self.matrix[row_number - 1][0]
+
+        raise PuzzleExcept(f"Row number ({row_number}) must be between 1"
+                           f" and the puzzle dimension {self.row_dimension}, inclusive.")
+
+
     def first_cell_in_column(self, column_number) -> Cell:
         """
         Returns first cell in column.
@@ -537,11 +562,13 @@ class Puzzle:
         :return: First cell in given column
         :rtype: Cell
         """
-        if column_number < 1 and column_number > self.dimension:
-            raise PuzzleExcept(f"Column number ({column_number}) must be between 1 and the puzzle dimension {self.dimension}, inclusive.")
-        return self.matrix[0][column_number - 1]
+        if 1 <= column_number <= self.column_dimension:
+            return self.matrix[0][column_number - 1]
 
-    # Returns formatted string with all cell values listed by row    
+        raise PuzzleExcept(f"Column number ({column_number}) must be between 1 and the"
+                           f" puzzle dimension {self.column_dimension}, inclusive.")
+
+    # Returns formatted string with all cell values listed by row
     def log_line(self, context = CellContext.NONE) -> str:
         """
         Generates string representation appropriate for logging of all puzzle 
@@ -561,37 +588,40 @@ class Puzzle:
             raise PuzzleExcept(f"log_line(): Invalid context type ({context.name}).")
 
         line_label = context.name
-        log_str += f"\n\tPuzzle {line_label}S:"
+        log_str = "\n\tPuzzle:"
 
         for line in range(1, end):
             log_str += f"\n\t\t\t{line_label} {line.ljust(2," ")}:"
 
             if context is CellContext.ROW:
-                first_cell = self.first_cell_in_row(line)            
+                first_cell = self.first_cell_in_row(line)
                 cell_iter = first_cell.row_iter()
             else:
-                first_cell = self.first_cell_in_column(line)            
+                first_cell = self.first_cell_in_column(line)
                 cell_iter = first_cell.column_iter()
 
             for cell in cell_iter:
-                sorted_contents = "".join(sorted(str(cell)))     
+                sorted_contents = "".join(sorted(str(cell)))
                 log_str += f"    {sorted_contents}"
-        return log_str   
+
+        return log_str
 
     def puzzle_log(self):
         """
         Returns puzzle contents in a format appropriate for logging.
         """
-        return f"{self.log_line()}".expandtabs(tab_size)
+        return f"{self.log_line()}".expandtabs(TAB_SIZE)
 
 # TODO: make docstrings below specific to base class
 class PuzzleBuilder(ABC):
     """
     Base puzzle builder that performs basic setup and validation. Most of the
-    details should be taken care of in derived classes. 
+    details should be taken care of in derived classes.
     """
+    # pylint: disable=C0301
     @abstractmethod
-    def __init__(self, puzzle, cell_factory, num_rows, num_columns, values = None, all_possible_values = DEFAULT_VALUE_OPTIONS, placeholder = DEFAULT_PLACEHOLDER):
+    def __init__(self, puzzle, cell_factory, num_rows, num_columns, values = None,       # pylint: disable=too-many-arguments
+                 all_possible_values = DEFAULT_VALUE_OPTIONS, placeholder = DEFAULT_PLACEHOLDER):
         """
         Validates and initializes puzzle with any passed-in values.
 
@@ -612,56 +642,71 @@ class PuzzleBuilder(ABC):
         """
         try:
             if placeholder in all_possible_values:
-                raise BuildError(f"Placeholder '{placeholder}' cannot be member of all_possible_values {all_possible_values}.")
+                raise BuildError(f"Placeholder '{placeholder}' cannot be member of"
+                                 "all_possible_values {all_possible_values}.")
 
             if len(placeholder) != 1:
                 raise BuildError(f"Placeholder '{placeholder}' must be single character.")
 
             self.placeholder = placeholder
 
+            self.puzzle = puzzle
             for row_index in range(num_rows):
                 row = []
                 for column_index in range(num_columns):
                     if values is None:
                         cell_value = self.placeholder
-
-# TODO: determine what usecase this is supposed to cover, remove if none found
-                    # elif isinstance(values, str):
-                    #     cell_value = values
-                    #     immutable = True
                     else:
                         cell_value = values[column_index + row_index * num_columns]
 
-                    row.append(cell_factory.new_cell(cell_value, row_index, column_index, placeholder))
+                    row.append(cell_factory.new_cell(cell_value, row_index,
+                                                     column_index, placeholder))
 
-                puzzle.add_row(row)
+                self.puzzle.add_row(row)
 
             # Link all cells by row
             for row_index in range(num_rows):
                 for column_index in range(num_columns - 1):
-                    puzzle[row_index, column_index]._set_next_cell_in_row(puzzle.matrix[row_index][column_index + 1])
-                puzzle[row_index, num_columns - 1]._set_next_cell_in_row(puzzle.matrix[row_index][0])    # link last cell back to 1st
+                    self.puzzle[row_index, column_index].set_next_cell_in_row(
+                                self.puzzle.matrix[row_index][column_index + 1])
+
+                # link last cell back to 1st
+                self.puzzle[row_index, num_columns - 1].set_next_cell_in_row(self.puzzle.matrix[row_index][0])
 
             # Link all cells by column
             for column_index in range(num_columns):
                 for row_index in range(num_rows - 1):
-                    puzzle[row_index, column_index]._set_next_cell_in_column(puzzle.matrix[row_index + 1][column_index])
-                puzzle[num_rows - 1, column_index]._set_next_cell_in_column(puzzle.matrix[0][column_index])   # link last cell back to 1st
+                    self.puzzle[row_index, column_index].set_next_cell_in_column(self.puzzle.matrix[row_index + 1][column_index])
+
+                # link last cell back to 1st
+                self.puzzle[num_rows - 1, column_index].set_next_cell_in_column(self.puzzle.matrix[0][column_index])
 
         except Exception as ex:
-            raise BuildError(f"PuzzleBuilder(): {ex}.")
+            raise BuildError("PuzzleBuilder(): Error building puzzle ") from ex
+
+    def get_puzzle(self) -> Puzzle:
+        """Returns puzzle."""
+        return self.puzzle
 
 
 class GenericPuzzleBuilder(PuzzleBuilder):
+    """
+    Generic puzzle builder for testing.
+    """
     def __init__(self, values = None, rows = 9, columns = 9):
         try:
             # create cells to hold all initial puzzle values (or space if no data provided)
-#TODO: passing # rows/columns to Sudoku AND to the parent builder class seems redundant. 
-# Maybe have the parent builder class derive dimensions from passed in puzzle? Change for all occurences.
+#TODO: passing # rows/columns to Sudoku AND to the parent builder class seems redundant.
+# Maybe have the parent builder class derive dimensions from passed in puzzle? Change
+# for all occurences.
             puzzle = Puzzle(rows, columns)
             cell_factory = GenericCellFactory()
-            super().__init__(puzzle, cell_factory, rows, columns, values)   # does basic row/column set up and row and column linked lists
 
-        except:
-            raise
+            # basic row/column set up and row and column linked lists
+            super().__init__(puzzle, cell_factory, rows, columns, values)
 
+        except Exception as ex:
+            raise BuildError("GenericPuzzleBuilder() Error building puzzle ") from ex
+
+    def get_puzzle(self) -> Puzzle:
+        return self.puzzle

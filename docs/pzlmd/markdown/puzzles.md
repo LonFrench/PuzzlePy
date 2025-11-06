@@ -11,6 +11,8 @@ for implementing various types of 2-D puzzles.
 
 Bases: `object`
 
+Base class for all puzzle types providing basic row and column validation and access.
+
 #### \_\_init_\_(row_dimension, column_dimension)
 
 #### \_\_eq_\_(other) → bool
@@ -43,11 +45,15 @@ the placeholder.
 
 #### add_row(row)
 
+Appends passed-in row to puzzle.
+
 #### max_contents_size()
 
 Returns the highest number of elements found in any Cell.
 
-#### get_random_empty()
+#### random_empty()
+
+Returns a random empty cell.
 
 #### first_cell_in_row(row_number) → [Cell](#puzzle.Cell)
 
@@ -86,14 +92,14 @@ lines of the given type.
 
 Returns puzzle contents in a format appropriate for logging.
 
-### *class* puzzle.PuzzleBuilder(puzzle, cell_factory, num_rows, num_columns, values=None, all_possible_values=['1', '2', '3', '4', '5', '6', '7', '8', '9'], placeholder=' ')
+### *class* puzzle.PuzzleBuilder(puzzle, cell_factory, num_rows, num_columns, values=None, all_possible_values=('1', '2', '3', '4', '5', '6', '7', '8', '9'), placeholder=' ')
 
 Bases: `ABC`
 
 Base puzzle builder that performs basic setup and validation. Most of the
 details should be taken care of in derived classes.
 
-#### *abstractmethod* \_\_init_\_(puzzle, cell_factory, num_rows, num_columns, values=None, all_possible_values=['1', '2', '3', '4', '5', '6', '7', '8', '9'], placeholder=' ')
+#### *abstractmethod* \_\_init_\_(puzzle, cell_factory, num_rows, num_columns, values=None, all_possible_values=('1', '2', '3', '4', '5', '6', '7', '8', '9'), placeholder=' ')
 
 Validates and initializes puzzle with any passed-in values.
 
@@ -109,6 +115,10 @@ Validates and initializes puzzle with any passed-in values.
   * **placeholder** (*char*) – Char used to denote empty Cells (defaults to ‘ ‘)
 * **Raises:**
   SudokuBuildError if invalid parameter enountered
+
+#### get_puzzle() → [Puzzle](#puzzle.Puzzle)
+
+Returns puzzle.
 
 ### *exception* puzzle.PuzzleExcept(err_msg)
 
@@ -130,6 +140,8 @@ Used for exceptions arising from puzzle build errors.
 
 Bases: [`PuzzleBuilder`](#puzzle.PuzzleBuilder)
 
+Generic puzzle builder for testing.
+
 #### \_\_init_\_(values=None, rows=9, columns=9)
 
 Validates and initializes puzzle with any passed-in values.
@@ -146,6 +158,10 @@ Validates and initializes puzzle with any passed-in values.
   * **placeholder** (*char*) – Char used to denote empty Cells (defaults to ‘ ‘)
 * **Raises:**
   SudokuBuildError if invalid parameter enountered
+
+#### get_puzzle() → [Puzzle](#puzzle.Puzzle)
+
+Returns puzzle.
 
 ### *class* puzzle.CellIterator(cell, context_type=CellContext.NONE)
 
@@ -200,6 +216,22 @@ Base ctor
 #### \_\_str_\_()
 
 Return str(self).
+
+#### set_next_cell_in_row(next_cell)
+
+Set reference to next cell in row.
+
+#### set_next_cell_in_column(next_cell)
+
+Set reference to next cell in column.
+
+#### get_next_cell_in_row()
+
+Returns reference to next cell in row.
+
+#### get_next_cell_in_column()
+
+Returns reference to next cell in column.
 
 #### set(raw_value) → bool
 
@@ -314,13 +346,13 @@ Removes the passed values from the cell’s contents.
 * **Return type:**
   bool
 
-### *class* puzzle.GenericCell(s_value)
+### *class* puzzle.GenericCell(value, row_index=-1, column_index=-1, placeholder=' ')
 
 Bases: [`Cell`](#puzzle.Cell)
 
 Basic Cell that can be instantiated for testing.
 
-#### \_\_init_\_(s_value)
+#### \_\_init_\_(value, row_index=-1, column_index=-1, placeholder=' ')
 
 Base ctor
 
@@ -393,7 +425,7 @@ Used to return basic Cell instance for testing.
 
 #### \_\_init_\_()
 
-#### new_cell(value, row=-1, column=-1, immutable=False)
+#### new_cell(value=None, row_index=0, column_index=0, placeholder=' ')
 
 Used by corresponding “builder” classes to 
 create Cells for the type of puzzle under construction.
@@ -415,7 +447,7 @@ create Cells for the type of puzzle under construction.
 
 Value of an empty cell (placeholder) if not specified.
 
-### puzzle.DEFAULT_VALUE_OPTIONS *= ['1', '2', '3', '4', '5', '6', '7', '8', '9']*
+### puzzle.DEFAULT_VALUE_OPTIONS *= ('1', '2', '3', '4', '5', '6', '7', '8', '9')*
 
 Puzzle values list to use if one is not provided.
 
@@ -545,14 +577,14 @@ Returns puzzle contents as a string appropriate for logging. The
 string is formatted for readability; layout adjusted per puzzle
 dimension and white space dynamically adapted to cell content size.
 
-### *class* sudoku.SudokuBuilder(starting_values=None, dimension=9, all_possible_values=['1', '2', '3', '4', '5', '6', '7', '8', '9'], placeholder=' ')
+### *class* sudoku.SudokuBuilder(starting_values=None, dimension=9, all_possible_values=('1', '2', '3', '4', '5', '6', '7', '8', '9'), placeholder=' ')
 
 Bases: [`PuzzleBuilder`](#puzzle.PuzzleBuilder)
 
 Creates a matrix of Sudoku cells that are circularly linked per 
 the 3 relevant Sudoku contexts; row, column, box.
 
-#### \_\_init_\_(starting_values=None, dimension=9, all_possible_values=['1', '2', '3', '4', '5', '6', '7', '8', '9'], placeholder=' ')
+#### \_\_init_\_(starting_values=None, dimension=9, all_possible_values=('1', '2', '3', '4', '5', '6', '7', '8', '9'), placeholder=' ')
 
 Validates and initializes puzzle with any passed-in values.
 

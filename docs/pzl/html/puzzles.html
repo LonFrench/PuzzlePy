@@ -54,7 +54,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Puzzle.empty_count"><code class="docutils literal notranslate"><span class="pre">Puzzle.empty_count()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Puzzle.add_row"><code class="docutils literal notranslate"><span class="pre">Puzzle.add_row()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Puzzle.max_contents_size"><code class="docutils literal notranslate"><span class="pre">Puzzle.max_contents_size()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#puzzle.Puzzle.get_random_empty"><code class="docutils literal notranslate"><span class="pre">Puzzle.get_random_empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#puzzle.Puzzle.random_empty"><code class="docutils literal notranslate"><span class="pre">Puzzle.random_empty()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Puzzle.first_cell_in_row"><code class="docutils literal notranslate"><span class="pre">Puzzle.first_cell_in_row()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Puzzle.first_cell_in_column"><code class="docutils literal notranslate"><span class="pre">Puzzle.first_cell_in_column()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Puzzle.log_line"><code class="docutils literal notranslate"><span class="pre">Puzzle.log_line()</span></code></a></li>
@@ -63,6 +63,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#puzzle.PuzzleBuilder"><code class="docutils literal notranslate"><span class="pre">PuzzleBuilder</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.PuzzleBuilder.__init__"><code class="docutils literal notranslate"><span class="pre">PuzzleBuilder.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#puzzle.PuzzleBuilder.get_puzzle"><code class="docutils literal notranslate"><span class="pre">PuzzleBuilder.get_puzzle()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#puzzle.PuzzleExcept"><code class="docutils literal notranslate"><span class="pre">PuzzleExcept</span></code></a><ul>
@@ -75,6 +76,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#puzzle.GenericPuzzleBuilder"><code class="docutils literal notranslate"><span class="pre">GenericPuzzleBuilder</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.GenericPuzzleBuilder.__init__"><code class="docutils literal notranslate"><span class="pre">GenericPuzzleBuilder.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#puzzle.GenericPuzzleBuilder.get_puzzle"><code class="docutils literal notranslate"><span class="pre">GenericPuzzleBuilder.get_puzzle()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#puzzle.CellIterator"><code class="docutils literal notranslate"><span class="pre">CellIterator</span></code></a><ul>
@@ -92,6 +94,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#puzzle.Cell"><code class="docutils literal notranslate"><span class="pre">Cell</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Cell.__init__"><code class="docutils literal notranslate"><span class="pre">Cell.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Cell.__str__"><code class="docutils literal notranslate"><span class="pre">Cell.__str__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#puzzle.Cell.set_next_cell_in_row"><code class="docutils literal notranslate"><span class="pre">Cell.set_next_cell_in_row()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#puzzle.Cell.set_next_cell_in_column"><code class="docutils literal notranslate"><span class="pre">Cell.set_next_cell_in_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#puzzle.Cell.get_next_cell_in_row"><code class="docutils literal notranslate"><span class="pre">Cell.get_next_cell_in_row()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#puzzle.Cell.get_next_cell_in_column"><code class="docutils literal notranslate"><span class="pre">Cell.get_next_cell_in_column()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Cell.set"><code class="docutils literal notranslate"><span class="pre">Cell.set()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Cell.row_iter"><code class="docutils literal notranslate"><span class="pre">Cell.row_iter()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#puzzle.Cell.column_iter"><code class="docutils literal notranslate"><span class="pre">Cell.column_iter()</span></code></a></li>
@@ -282,6 +288,7 @@ for implementing various types of 2-D puzzles.</p>
 <dt class="sig sig-object py" id="puzzle.Puzzle">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">puzzle.</span></span><span class="sig-name descname"><span class="pre">Puzzle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_dimension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_dimension</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.Puzzle" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for all puzzle types providing basic row and column validation and access.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="puzzle.Puzzle.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_dimension</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_dimension</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.Puzzle.__init__" title="Link to this definition"></a></dt>
@@ -332,7 +339,8 @@ the placeholder.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="puzzle.Puzzle.add_row">
 <span class="sig-name descname"><span class="pre">add_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.Puzzle.add_row" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Appends passed-in row to puzzle.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="puzzle.Puzzle.max_contents_size">
@@ -341,9 +349,10 @@ the placeholder.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="puzzle.Puzzle.get_random_empty">
-<span class="sig-name descname"><span class="pre">get_random_empty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.Puzzle.get_random_empty" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="puzzle.Puzzle.random_empty">
+<span class="sig-name descname"><span class="pre">random_empty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.Puzzle.random_empty" title="Link to this definition"></a></dt>
+<dd><p>Returns a random empty cell.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="puzzle.Puzzle.first_cell_in_row">
@@ -405,13 +414,13 @@ strings</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="puzzle.PuzzleBuilder">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">puzzle.</span></span><span class="sig-name descname"><span class="pre">PuzzleBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">puzzle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_factory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_possible_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['1',</span> <span class="pre">'2',</span> <span class="pre">'3',</span> <span class="pre">'4',</span> <span class="pre">'5',</span> <span class="pre">'6',</span> <span class="pre">'7',</span> <span class="pre">'8',</span> <span class="pre">'9']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.PuzzleBuilder" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">puzzle.</span></span><span class="sig-name descname"><span class="pre">PuzzleBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">puzzle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_factory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_possible_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('1',</span> <span class="pre">'2',</span> <span class="pre">'3',</span> <span class="pre">'4',</span> <span class="pre">'5',</span> <span class="pre">'6',</span> <span class="pre">'7',</span> <span class="pre">'8',</span> <span class="pre">'9')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.PuzzleBuilder" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>Base puzzle builder that performs basic setup and validation. Most of the
 details should be taken care of in derived classes.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="puzzle.PuzzleBuilder.__init__">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">puzzle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_factory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_possible_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['1',</span> <span class="pre">'2',</span> <span class="pre">'3',</span> <span class="pre">'4',</span> <span class="pre">'5',</span> <span class="pre">'6',</span> <span class="pre">'7',</span> <span class="pre">'8',</span> <span class="pre">'9']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.PuzzleBuilder.__init__" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">puzzle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_factory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_possible_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('1',</span> <span class="pre">'2',</span> <span class="pre">'3',</span> <span class="pre">'4',</span> <span class="pre">'5',</span> <span class="pre">'6',</span> <span class="pre">'7',</span> <span class="pre">'8',</span> <span class="pre">'9')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.PuzzleBuilder.__init__" title="Link to this definition"></a></dt>
 <dd><p>Validates and initializes puzzle with any passed-in values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -431,6 +440,12 @@ given. Each value must be unique.</p></li>
 <dd class="field-even"><p>SudokuBuildError if invalid parameter enountered</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="puzzle.PuzzleBuilder.get_puzzle">
+<span class="sig-name descname"><span class="pre">get_puzzle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#puzzle.Puzzle" title="puzzle.Puzzle"><span class="pre">Puzzle</span></a></span></span><a class="headerlink" href="#puzzle.PuzzleBuilder.get_puzzle" title="Link to this definition"></a></dt>
+<dd><p>Returns puzzle.</p>
 </dd></dl>
 
 </dd></dl>
@@ -463,6 +478,7 @@ given. Each value must be unique.</p></li>
 <dt class="sig sig-object py" id="puzzle.GenericPuzzleBuilder">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">puzzle.</span></span><span class="sig-name descname"><span class="pre">GenericPuzzleBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.GenericPuzzleBuilder" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#puzzle.PuzzleBuilder" title="puzzle.PuzzleBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">PuzzleBuilder</span></code></a></p>
+<p>Generic puzzle builder for testing.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="puzzle.GenericPuzzleBuilder.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.GenericPuzzleBuilder.__init__" title="Link to this definition"></a></dt>
@@ -485,6 +501,12 @@ given. Each value must be unique.</p></li>
 <dd class="field-even"><p>SudokuBuildError if invalid parameter enountered</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="puzzle.GenericPuzzleBuilder.get_puzzle">
+<span class="sig-name descname"><span class="pre">get_puzzle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#puzzle.Puzzle" title="puzzle.Puzzle"><span class="pre">Puzzle</span></a></span></span><a class="headerlink" href="#puzzle.GenericPuzzleBuilder.get_puzzle" title="Link to this definition"></a></dt>
+<dd><p>Returns puzzle.</p>
 </dd></dl>
 
 </dd></dl>
@@ -560,6 +582,30 @@ place this Cell; required</p></li>
 <dt class="sig sig-object py" id="puzzle.Cell.__str__">
 <span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.Cell.__str__" title="Link to this definition"></a></dt>
 <dd><p>Return str(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="puzzle.Cell.set_next_cell_in_row">
+<span class="sig-name descname"><span class="pre">set_next_cell_in_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">next_cell</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.Cell.set_next_cell_in_row" title="Link to this definition"></a></dt>
+<dd><p>Set reference to next cell in row.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="puzzle.Cell.set_next_cell_in_column">
+<span class="sig-name descname"><span class="pre">set_next_cell_in_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">next_cell</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.Cell.set_next_cell_in_column" title="Link to this definition"></a></dt>
+<dd><p>Set reference to next cell in column.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="puzzle.Cell.get_next_cell_in_row">
+<span class="sig-name descname"><span class="pre">get_next_cell_in_row</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.Cell.get_next_cell_in_row" title="Link to this definition"></a></dt>
+<dd><p>Returns reference to next cell in row.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="puzzle.Cell.get_next_cell_in_column">
+<span class="sig-name descname"><span class="pre">get_next_cell_in_column</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.Cell.get_next_cell_in_column" title="Link to this definition"></a></dt>
+<dd><p>Returns reference to next cell in column.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -737,12 +783,12 @@ Cell’s value.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="puzzle.GenericCell">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">puzzle.</span></span><span class="sig-name descname"><span class="pre">GenericCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.GenericCell" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">puzzle.</span></span><span class="sig-name descname"><span class="pre">GenericCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.GenericCell" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#puzzle.Cell" title="puzzle.Cell"><code class="xref py py-class docutils literal notranslate"><span class="pre">Cell</span></code></a></p>
 <p>Basic Cell that can be instantiated for testing.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="puzzle.GenericCell.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.GenericCell.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.GenericCell.__init__" title="Link to this definition"></a></dt>
 <dd><p>Base ctor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -857,7 +903,7 @@ place this Cell (defaults to 0)</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="puzzle.GenericCellFactory.new_cell">
-<span class="sig-name descname"><span class="pre">new_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">immutable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.GenericCellFactory.new_cell" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">new_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#puzzle.GenericCellFactory.new_cell" title="Link to this definition"></a></dt>
 <dd><p>Used by corresponding “builder” classes to 
 create Cells for the type of puzzle under construction.</p>
 <dl class="field-list simple">
@@ -891,7 +937,7 @@ place this Cell (defaults to 0)</p></li>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="puzzle.DEFAULT_VALUE_OPTIONS">
-<span class="sig-prename descclassname"><span class="pre">puzzle.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_VALUE_OPTIONS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['1',</span> <span class="pre">'2',</span> <span class="pre">'3',</span> <span class="pre">'4',</span> <span class="pre">'5',</span> <span class="pre">'6',</span> <span class="pre">'7',</span> <span class="pre">'8',</span> <span class="pre">'9']</span></em><a class="headerlink" href="#puzzle.DEFAULT_VALUE_OPTIONS" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">puzzle.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_VALUE_OPTIONS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('1',</span> <span class="pre">'2',</span> <span class="pre">'3',</span> <span class="pre">'4',</span> <span class="pre">'5',</span> <span class="pre">'6',</span> <span class="pre">'7',</span> <span class="pre">'8',</span> <span class="pre">'9')</span></em><a class="headerlink" href="#puzzle.DEFAULT_VALUE_OPTIONS" title="Link to this definition"></a></dt>
 <dd><p>Puzzle values list to use if one is not provided.</p>
 </dd></dl>
 
@@ -1105,13 +1151,13 @@ dimension and white space dynamically adapted to cell content size.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sudoku.SudokuBuilder">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sudoku.</span></span><span class="sig-name descname"><span class="pre">SudokuBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">starting_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_possible_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['1',</span> <span class="pre">'2',</span> <span class="pre">'3',</span> <span class="pre">'4',</span> <span class="pre">'5',</span> <span class="pre">'6',</span> <span class="pre">'7',</span> <span class="pre">'8',</span> <span class="pre">'9']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sudoku.SudokuBuilder" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sudoku.</span></span><span class="sig-name descname"><span class="pre">SudokuBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">starting_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_possible_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('1',</span> <span class="pre">'2',</span> <span class="pre">'3',</span> <span class="pre">'4',</span> <span class="pre">'5',</span> <span class="pre">'6',</span> <span class="pre">'7',</span> <span class="pre">'8',</span> <span class="pre">'9')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sudoku.SudokuBuilder" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#puzzle.PuzzleBuilder" title="puzzle.PuzzleBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">PuzzleBuilder</span></code></a></p>
 <p>Creates a matrix of Sudoku cells that are circularly linked per 
 the 3 relevant Sudoku contexts; row, column, box.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sudoku.SudokuBuilder.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">starting_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_possible_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['1',</span> <span class="pre">'2',</span> <span class="pre">'3',</span> <span class="pre">'4',</span> <span class="pre">'5',</span> <span class="pre">'6',</span> <span class="pre">'7',</span> <span class="pre">'8',</span> <span class="pre">'9']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sudoku.SudokuBuilder.__init__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">starting_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_possible_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('1',</span> <span class="pre">'2',</span> <span class="pre">'3',</span> <span class="pre">'4',</span> <span class="pre">'5',</span> <span class="pre">'6',</span> <span class="pre">'7',</span> <span class="pre">'8',</span> <span class="pre">'9')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">placeholder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sudoku.SudokuBuilder.__init__" title="Link to this definition"></a></dt>
 <dd><p>Validates and initializes puzzle with any passed-in values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

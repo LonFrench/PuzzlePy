@@ -7,11 +7,13 @@ Modules
 puzzle
 ------
 
+.. image:: classes.png
+   :alt: This is the class diagram
 .. automodule:: puzzle
    :members:
    :show-inheritance:
    :undoc-members:
-
+   
 sudoku
 ------
 

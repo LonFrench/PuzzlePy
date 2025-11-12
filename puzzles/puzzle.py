@@ -117,7 +117,7 @@ class Cell(ABC):
     def __iter__(self):
         return iter(self.contents)
 
-    def _set_immutable(self, state):
+    def set_immutable(self, state):
         self.immutable = state
 
     def set_next_cell_in_row(self, next_cell):
@@ -315,7 +315,7 @@ class CellFactory(ABC):
     puzzles of the desired type.
     """
     @abstractmethod
-    def new_cell(self, value = None, row_index = 0, column_index = 0,
+    def new_cell(self, value = None, row_index = -1, column_index = -1,
                  placeholder = DEFAULT_PLACEHOLDER) -> Cell:
         """
         Used by corresponding "builder" classes to 

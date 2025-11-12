@@ -413,7 +413,6 @@ class ColumnIterator(CellIterator):
 
         return cell
 
-
 class Puzzle:
     """
     Base class for all puzzle types providing basic row and column validation and access.
@@ -437,7 +436,6 @@ class Puzzle:
     #     val = [str(self.matrix[row][col]) for row in range(self.row_dimension) for ...
     #                                            ...     col in range(self.column_dimension)]
     #     pass
-
 
     def __len__(self):
         """   

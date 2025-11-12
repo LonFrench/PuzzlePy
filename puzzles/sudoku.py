@@ -1,13 +1,13 @@
 """
 This module extends classes defined in the puzzle module and defines new classes used for building and solving Sudoku puzzles.
 """
-from puzzle import *
 import copy
 import random
 import math
 import logging
 from enum import Enum, auto
 from typing import Tuple
+from puzzle import *
 
 # TODO: test w/ letters & special chars to ensure cell contents are agnostic; update docstrings to reflect that passed values aren't integers.
 
@@ -20,8 +20,9 @@ logging.basicConfig(filename="builder.log",
                     level=logging.DEBUG)
 
 def log(func, *args):
-    newMessage = (f"{__name__}: {args[0]}")  #using wrapper
-    func(newMessage)
+    """Log message."""
+    new_message = f"{__name__}: {args[0]}"  #using wrapper
+    func(new_message)
 
 
 class SudokuErrors(Exception):
@@ -52,12 +53,15 @@ class SudokuCell(Cell):
         super().__init__(value, row_index, column_index, placeholder)
 
     def set_next_cell_in_box(self, next_cell):
+        """Sets next cell in linked box cell list."""
         self.next_cell_in_box = next_cell
 
     def set_box_number(self, box_number):
+        """Sets box's number."""
         self.box_number = box_number
 
-    def get_next_cell_in_box(self):
+    def get_next_cell_in_box(self) -> Cell:
+        """Returns next cell in Sudoku box."""
         return self.next_cell_in_box
 
     def box_iter(self):
@@ -75,11 +79,16 @@ class SudokuCell(Cell):
         self.remove_value_from_context(self.column_iter())
         self.remove_value_from_context(self.box_iter())
 
-    def set_box_number(self, box_number):
-        self.box_number = box_number
+    def set_if_no_conflict(self, value) -> bool:
+        """
+        Sets the cell's content to the given value if it is unique within all 
+        of the cell's contexts.
 
-    # Returns True if able to set cell to value, False otherwise
-    def set_if_no_conflict(self, value):
+        :parameter value: Potential contents
+        :type value: char
+        :return: True if value was set, False otherwise.
+        :rtype: bool
+        """
         if len(self) != 0:
             return False
 
@@ -89,7 +98,15 @@ class SudokuCell(Cell):
         self.contents = value
         return True
 
-    def value_exists_within_view(self, value):
+    def value_exists_within_view(self, value) -> bool:
+        """
+        Determines whether given value exists in any of the cell's contexts.
+
+        :parameter value: Search value
+        :type value: char
+        :return: True if value can be found in at least one cell within the given cell's contexts.
+        :rtype: bool
+        """
         if self.value_in_context(self.row_iter(), value) is True:
             return True
         if self.value_in_context(self.column_iter(), value) is True:
@@ -99,6 +116,7 @@ class SudokuCell(Cell):
         return False
 
 class SudokuCellFactory(CellFactory):
+    """Used to create Sudoku cells."""
     def __init__(self):
         self.type = "Sudoku"
 
@@ -106,6 +124,7 @@ class SudokuCellFactory(CellFactory):
         return SudokuCell(value, row_index, column_index, placeholder)
 
 class BoxIterator(CellIterator):
+    """Derived class used to traverse cells in a Sudoku box."""
     def __init__(self, cell):
         super().__init__(cell, CellContext.BOX)
 
@@ -140,20 +159,38 @@ class Sudoku(Puzzle):
         self.dimension = dimension
         super().__init__(dimension, dimension)
 
-    def get_box_dimension(self):
+    def get_box_dimension(self) -> int:
+        """Returns size of a box side."""
         return self.box_dimension
 
     # Param is box number with the upper left being #1 down to the last on in the lower right
-    # Returns the upper left cell of box
-    def first_cell_in_box(self, box_number):
-        if box_number < 1 and box_number > self.dimension:
+    def first_cell_in_box(self, box_number) -> SudokuCell:
+        """
+        Returns upper left cell of cell in box (last cell is in lower right).
+
+        :parameter box_number: Id of box.
+        :type box_number: int
+        :return: Cell representing "first" cell in box.
+        :rtype: SudokuCell
+        """
+        if 1 > box_number > self.dimension:
             raise PuzzleExcept(f"Box number ({box_number}) must be between 1 and the puzzle dimension {self.dimension}.")
 
         puzzle_row    = int( (box_number - 1) / self.box_dimension) * self.box_dimension
         puzzle_column =    ( (box_number -1) * self.box_dimension ) % self.dimension
         return self.matrix[puzzle_row][puzzle_column]
 
-    def get_context_iterator(self, context_type, number):
+    def get_context_iterator(self, context_type, number) -> CellIterator:
+        """
+        Returns iterator for the specific context.
+
+        :parameter context_type: Type of iterator (ROW, COLUMN, or BOX) to return.
+        :type context_type: CellContext
+        :parameter number: Id of specific context
+        :type number: int
+        :return: Iterator from the first cell in specific context.
+        :rtype: derivative types of CellIterator
+        """
 
         if context_type == CellContext.ROW:
             first_cell = self.first_cell_in_row(number)
@@ -207,9 +244,7 @@ class Sudoku(Puzzle):
 
             return status
         except Exception as ex:
-            raise PuzzleExcept("Sudoku.place_value() .")
-            # raise PuzzleExcept(f"Sudoku.place_value() {ex}.")
-
+            raise PuzzleExcept("Sudoku.place_value()") from ex
 
     def backup_count(self, box_num):
         """ Compute how many steps to backtrack based on position within puzzle."""
@@ -302,7 +337,7 @@ class Sudoku(Puzzle):
             log(logger.debug, f"Sudoku.place_value() Failed to place {value} in box #{box_num}, backing up {backup_count} step(s).")
             return PlaceStatus.FAILED, backup_count
         except Exception as ex:
-            raise PuzzleExcept(f"Sudoku.place_value() {ex}.")
+            raise PuzzleExcept("Sudoku.place_value()") from ex
 
     def eligible_box_cells(self, box_num, value):
         """
@@ -339,7 +374,7 @@ class Sudoku(Puzzle):
 
             return open_cells
         except Exception as ex:
-            raise PuzzleExcept(f"Sudoku.eligible_box_cells() {ex}.")
+            raise PuzzleExcept("Sudoku.eligible_box_cells()") from ex
 
     def fill_empty_cells_with_options(self):
         """
@@ -368,7 +403,16 @@ class Sudoku(Puzzle):
                 if len(cell) == 1:
                     cell.remove_value_from_view()
 
-    def apply_to_all_contexts(self, func_to_apply ):
+# TODO: define interface for func
+    def apply_to_all_contexts(self, func_to_apply ) -> bool:
+        """
+        Applies method to all contexts within Sudoku puzzle.
+        
+        :parameter func_to_apply: Method to apply across all contexts.
+        :type func_to_apply: method
+        :return: True if change was made, False otherwise.
+        :rtype: bool
+        """
         change_made = True
         overall_change_made = False
         count = 0
@@ -924,7 +968,7 @@ class SudokuBuilder(PuzzleBuilder):
         return self.puzzle
 
 
-#TODO:  need to add "add" method or something to track size (set self.dimension), 
+#TODO:  need to add "add" method or something to track size (set self.dimension),
 # or maybe "finished_building" method for this
 
 class SudokuSolver():
@@ -962,7 +1006,7 @@ class SudokuSolver():
             else:
                 return
 
-            # Resolve remaining cells using trial and error 
+            # Resolve remaining cells using trial and error
             puzzle_backup = self.puzzle
             for i in range(0,10):
                 self.puzzle.clear_unsolved_cells()
@@ -976,5 +1020,4 @@ class SudokuSolver():
             log(logger.info, f"Puzzle was {"successfully" if status == PlaceStatus.PASSED else "not"} solved.")
 
         except Exception as ex:
-            raise SudokuErrors(f"SudokuSolver.solve() Exception while solving sudoku puzzle.") from ex
-
+            raise SudokuErrors(f"SudokuSolver.solve()") from ex
